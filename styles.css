@@ -68,7 +68,13 @@ input {
 }
 
 button.start-stop-timer {
+  background-image: url("./svg/playButton.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 30px;
+  height: 30px;
   display: block;
   margin: 25px auto 0;
   font-family: inherit;
+  border: none;
 }
