@@ -61,6 +61,7 @@ input {
   outline: none;
   text-align: center;
   font-size: 20px;
+  display: inline;
 }
 
 .timer input:focus {
@@ -68,7 +69,6 @@ input {
 }
 
 button.start-stop-timer {
-  background-image: url("./svg/playButton.svg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   width: 30px;
@@ -77,4 +77,18 @@ button.start-stop-timer {
   margin: 25px auto 0;
   font-family: inherit;
   border: none;
+}
+
+button.play{
+  background-image: url("./svg/playButton.svg");
+  border-radius: 1em;
+}
+
+button.pause{
+  background-image: url("./svg/pauseButton.svg");
+  border-radius: 1em;
+}
+
+.hidden{
+  display: none;
 }
