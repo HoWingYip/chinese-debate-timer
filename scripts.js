@@ -17,7 +17,7 @@ document.querySelectorAll(".timer .timer-input-wrapper").forEach((timerInputWrap
 
     const totalTimerDuration = timerDurationMinutes * 60n + timerDurationSeconds;
     timerInputWrapper.parentNode.dataset.duration = totalTimerDuration;
-    durationInputMinutes.value = String(totalTimerDuration / 60n).padStart(2, "0");
+    durationInputMinutes.value = String(totalTimerDuration / 60n);
     durationInputSeconds.value = String(totalTimerDuration % 60n).padStart(2, "0");
     // changing value via JS doesn't trigger oninput, so manually change input width
     durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
@@ -34,11 +34,7 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
 
   timerInput.addEventListener("input", () => {
     timerInput.style.transition = "border-bottom-color 0.2s";
-    if (timerInput.value === "") {
-      timerInput.style.width = "2em";  
-    } else {
-      timerInput.style.width = `${timerInput.value.length}ch`;
-    }
+    timerInput.style.width = `${Math.max(timerInput.value.length, 1)}ch`;
     setTimeout(() => {
       timerInput.style.transition = "width 0.2s, border-bottom-color 0.2s";
     }, 0);

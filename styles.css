@@ -60,7 +60,7 @@ input {
 }
 
 .timer input {
-  width: 2em;
+  width: 2ch;
   border-bottom: 1px solid black;
   outline: none;
   text-align: center;
