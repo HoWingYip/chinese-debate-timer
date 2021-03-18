@@ -1,0 +1,108 @@
+body {
+  margin: auto 20px;
+  font-family: "Open Sans", sans-serif;
+}
+
+h1 {
+  margin-bottom: 35px;
+}
+
+input {
+  padding: 0;
+  font-family: inherit;
+  text-align: center;
+  border: none;
+  outline: none;
+  transition: border-bottom-color 0.2s;
+}
+
+.regular-timer-module {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  margin: 0 auto 20px;
+  padding: 20px;
+  /* border: 1px solid black; */
+  border-radius: 15px;
+  box-shadow: 0 0 20px -3px #bbb;
+}
+
+.timer-left, .timer-right {
+  width: calc(50% - 20px);
+  padding-bottom: 13px;
+  text-align: center;
+}
+
+.timer-separator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 70%;
+  transform: translateY(-50%);
+  background-color: #000;
+}
+
+.timer-name {
+  width: calc(100% - 20px);
+  font-size: 35px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid transparent;
+}
+
+.timer-name:focus {
+  border-bottom-color: #3399ff;
+}
+
+.timer.timer-running {
+  color: rgb(53, 148, 53);
+}
+
+.timer input {
+  width: 2em;
+  border-bottom: 1px solid black;
+  outline: none;
+  text-align: center;
+  font-size: 20px;
+  color: inherit;
+  transition: width 0.2s, border-bottom-color 0.2s;
+}
+
+.timer.timer-running input {
+  width: 2ch;
+  border-bottom-color: transparent;
+}
+
+.timer input:focus {
+  border-bottom-color: #3399ff;
+}
+
+.timer.timer-running input:focus {
+  border-bottom-color: transparent;
+}
+
+button.start-stop-timer {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 30px;
+  height: 30px;
+  display: block;
+  margin: 25px auto 0;
+  font-family: inherit;
+  border: none;
+}
+
+button.play{
+  background-image: url("./svg/playButton.svg");
+  border-radius: 1em;
+}
+
+button.pause{
+  background-image: url("./svg/pauseButton.svg");
+  border-radius: 1em;
+}
+
+.hidden{
+  display: none;
+}
