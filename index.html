@@ -14,20 +14,20 @@
   <div class="regular-timer-module">
     <div class="timer-left">
       <input type="text" class="timer-name" value="1st prop">
-      <div class="timer">
-        <input type="text" class="time-remaining-minutes" placeholder="MM">
-        :
-        <input type="text" class="time-remaining-seconds" placeholder="SS">
+      <div class="timer" data-duration="0" data-paused="true">
+        <div class="timer-input-wrapper">
+          <input type="text" class="time-remaining-minutes" placeholder="MM">:<input type="text" class="time-remaining-seconds" placeholder="SS">
+        </div>
         <button class="start-stop-timer">Start</button>
       </div>
     </div>
     <div class="timer-separator"></div>
-    <div class="timer-right">
+    <div class="timer-right" data-paused="true">
       <input type="text" class="timer-name" value="1st opp">
-      <div class="timer">
-        <input type="text" class="time-remaining-minutes" placeholder="MM">
-        :
-        <input type="text" class="time-remaining-seconds" placeholder="SS">
+      <div class="timer" data-duration="0" data-paused="true">
+        <div class="timer-input-wrapper">
+          <input type="text" class="time-remaining-minutes" placeholder="MM">:<input type="text" class="time-remaining-seconds" placeholder="SS">
+        </div>
         <button class="start-stop-timer">Start</button>
       </div>
     </div>

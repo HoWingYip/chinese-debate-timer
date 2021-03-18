@@ -13,7 +13,7 @@ input {
   text-align: center;
   border: none;
   outline: none;
-  transition: border-bottom-color 0.1s;
+  transition: border-bottom-color 0.2s;
 }
 
 .regular-timer-module {
@@ -55,16 +55,31 @@ input {
   border-bottom-color: #3399ff;
 }
 
+.timer.timer-running {
+  color: rgb(53, 148, 53);
+}
+
 .timer input {
   width: 2em;
   border-bottom: 1px solid black;
   outline: none;
   text-align: center;
   font-size: 20px;
+  color: inherit;
+  transition: width 0.2s, border-bottom-color 0.2s;
+}
+
+.timer.timer-running input {
+  width: 2ch;
+  border-bottom-color: transparent;
 }
 
 .timer input:focus {
   border-bottom-color: #3399ff;
+}
+
+.timer.timer-running input:focus {
+  border-bottom-color: transparent;
 }
 
 button.start-stop-timer {
