@@ -55,12 +55,14 @@ input {
   border-bottom-color: #3399ff;
 }
 
-.timer.timer-running {
+.timer[data-running="true"] {
   color: rgb(53, 148, 53);
+}
+.timer[data-running="true"].timer-last-1-min {
+  color: red;
 }
 
 .timer input {
-  width: 2ch;
   border-bottom: 1px solid black;
   outline: none;
   text-align: center;
@@ -68,10 +70,17 @@ input {
   color: inherit;
   transition: width 0.2s, border-bottom-color 0.2s;
 }
-
-.timer.timer-running input {
+.timer[data-running="true"] input {
   width: 2ch;
   border-bottom-color: transparent;
+}
+
+.timer input.time-remaining-minutes {
+  width: 1ch;
+}
+
+.timer input.time-remaining-seconds {
+  width: 2ch;
 }
 
 .timer input:focus {
@@ -82,8 +91,30 @@ input {
   border-bottom-color: transparent;
 }
 
-button.start-stop-timer {
+.timer button.start-stop-timer {
   display: block;
   margin: 25px auto 0;
   font-family: inherit;
+}
+
+/* TODO: replace text content of pseudo-elements with background images */
+
+.timer button.start-stop-timer::before {
+  content: "Start";
+}
+.timer[data-running="false"] button.start-stop-timer::before {
+  display: inline;
+}
+.timer[data-running="true"] button.start-stop-timer::before {
+  display: none;
+}
+
+.timer button.start-stop-timer::after {
+  content: "Pause";
+}
+.timer[data-running="false"] button.start-stop-timer::after {
+  display: none;
+}
+.timer[data-running="true"] button.start-stop-timer::after {
+  display: inline;
 }

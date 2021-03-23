@@ -50,32 +50,33 @@ document.querySelectorAll(".timer .timer-input-wrapper").forEach((timerInputWrap
       .getElementsByClassName("time-remaining-seconds")[0];
 
   timerInputWrapper.addEventListener("focusout", () => {
-    let timerDurationMinutes;
-    let timerDurationSeconds;
+    let userInputMinutes;
+    let userInputSeconds;
     try {
-      timerDurationMinutes = BigInt(durationInputMinutes.value);
-      timerDurationSeconds = BigInt(durationInputSeconds.value);
+      userInputMinutes = BigInt(durationInputMinutes.value);
+      userInputSeconds = BigInt(durationInputSeconds.value);
     } catch {
-      timerDurationMinutes = 0n;
-      timerDurationSeconds = 0n;
+      userInputMinutes = 0n;
+      userInputSeconds = 0n;
     }
 
-    const totalTimerDuration = timerDurationMinutes * 60n + timerDurationSeconds;
-    timerInputWrapper.parentNode.dataset.duration = totalTimerDuration;
+    const totalTimerDuration = userInputMinutes * 60n + userInputSeconds;
+    const timerDurationMinutes = totalTimerDuration / 60n;
+    const timerDurationSeconds = totalTimerDuration % 60n;
 
-    durationInputMinutes.value = String(totalTimerDuration / 60n);
-    durationInputSeconds.value = String(totalTimerDuration % 60n).padStart(2, "0");
+    // TODO: put below code into separate function
+    durationInputMinutes.value = String(timerDurationMinutes);
+    durationInputSeconds.value = String(timerDurationSeconds).padStart(2, "0");
     
     // changing value via JS doesn't trigger oninput, so manually change input width
     durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
     durationInputSeconds.style.width = `${durationInputSeconds.value.length}ch`;
-    
   });
 });
 
 document.querySelectorAll(".timer input").forEach((timerInput) => {
   timerInput.addEventListener("keypress", (event) => {
-    if (!["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event.key)) {
+    if (event.key < "0" || event.key > "9") {
       event.preventDefault();
     }
   });
@@ -90,46 +91,82 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
 });
 
 [...document.getElementsByClassName("timer")].forEach((timerElem) => {
-  timerElem.getElementsByClassName("start-stop-timer")[0]
-      .addEventListener("click", (event) => {
-        const durationInputMinutes = timerElem
-            .getElementsByClassName("time-remaining-minutes")[0];
-        const durationInputSeconds = timerElem
-            .getElementsByClassName("time-remaining-seconds")[0];
+  let prevTime = null;
+  let countdownIntervalId;
 
-        // unique identifier (can be improved during modularisation)
-        let identifier = timerElem.parentElement.className.split(" ")[0];
+  const durationInputMinutes = timerElem
+      .getElementsByClassName("time-remaining-minutes")[0];
+  const durationInputSeconds = timerElem
+      .getElementsByClassName("time-remaining-seconds")[0];
+  const timerStartStopButton = timerElem
+      .getElementsByClassName("start-stop-timer")[0];
 
-        if (timerElem.dataset.paused === "true") {
-          // START COUNTING DOWN
+  const stopTimer = () => {
+    timerElem.dataset.running = "false";
+    clearInterval(countdownIntervalId);
+    prevTime = null;
 
-          timerElem.classList.add("timer-running");
-          durationInputMinutes.readOnly = true;
-          durationInputSeconds.readOnly = true;
-          event.target.textContent = "Pause";
-          timerElem.dataset.paused = "false";
+    // UI updates
+    timerElem.classList.remove("timer-last-1-min");
+  };
 
+  const updateUiAccordingToTimerState = () => {
+    if (timerElem.dataset.running === "false") {
+      durationInputMinutes.readOnly = false;
+      durationInputSeconds.readOnly = false;
+    } else {
+      durationInputMinutes.readOnly = true;
+      durationInputSeconds.readOnly = true;
+    }
+  };
 
+  const getCurrentTimerDurationSeconds = () =>
+      BigInt(durationInputMinutes.value) * 60n + BigInt(durationInputSeconds.value);
+
+  timerStartStopButton.addEventListener("click", () => {
+    if (timerElem.dataset.running === "false") {
+      prevTime = new Date().getTime();
+
+      // START COUNTING DOWN
+      const countdownFunction = () => {
+        const msElapsed = BigInt(new Date().getTime() - prevTime);
+        const newTimeSeconds = getCurrentTimerDurationSeconds() - msElapsed / 1000n;
+        const timerDurationMinutes = newTimeSeconds / 60n;
+        const timerDurationSeconds = newTimeSeconds % 60n;
+
+        if (msElapsed >= 1000n) {
+          // TODO: put below code into separate function
+          durationInputMinutes.value = String(timerDurationMinutes);
+          durationInputSeconds.value = String(timerDurationSeconds).padStart(2, "0");
+
+          // changing value via JS doesn't trigger oninput, so manually change input width
+          durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
+          durationInputSeconds.style.width = `${durationInputSeconds.value.length}ch`;
           
-          
-          // Timer
-          // Starting referrence
-          let prev = new Date().getTime();
-          // Total time
-          let displayedTimerDuration = BigInt(durationInputMinutes.value) * 60n + BigInt(durationInputSeconds.value);
-          startTimer(prev, displayedTimerDuration, durationInputMinutes, durationInputSeconds, identifier);
-
-
-        } else {
-          // STOP COUNTING DOWN
-          
-          stopTimer(allIntervals[identifier]);
-
-          timerElem.classList.remove("timer-running");
-          durationInputMinutes.readOnly = false;
-          durationInputSeconds.readOnly = false;
-          event.target.textContent = "Start";
-          timerElem.dataset.paused = "true";
+          prevTime = new Date().getTime();
         }
-      });
-})
+
+        if (newTimeSeconds < 60n) {
+          timerElem.classList.add("timer-last-1-min");
+        }
+
+        if (timerDurationMinutes === 0n && timerDurationSeconds === 0n) {
+          stopTimer();
+          updateUiAccordingToTimerState();
+          return;
+        }
+      };
+
+      // run once before setting interval to set prevTime and update UI
+      countdownFunction();
+
+      countdownIntervalId = setInterval(countdownFunction, 1);
+
+      timerElem.dataset.running = "true";
+    } else {
+      stopTimer();
+    }
+
+    updateUiAccordingToTimerState();
+  });
+});
