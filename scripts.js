@@ -1,47 +1,61 @@
+const setDataAttribute = (element, attributeName, attributeValue) => {
+  element.dataset[attributeName] = String(attributeValue);
+};
 
-// Global Variables
+const getDataAttribute = (element, attributeName, desiredType = String) => {
+  if (desiredType === Boolean) {
+    // ensure false is returned when element.dataset[attributeName] === "false"
+    // gotcha: Boolean("false") === true
+    return element.dataset[attributeName] === "true";
+  }
 
-// allIntervals is a global object that stores all Intervals for reference to pausing later on, may help with modularisation
-let allIntervals = new Object();
+  return desiredType(element.dataset[attributeName]);
+};
 
-// Function to start the timer
-// prev -> The initial starting Date() object
-// displayedTimerDuration -> input the total time in seconds
-// durationInputMinutes -> The HTML Input to use for minutes
-// durationInputSeconds -> The HTML Input to use for seconds
+const stopTimer = (timerElem, countdownIntervalId) => {
+  setDataAttribute(timerElem, "running", false);
+  clearInterval(countdownIntervalId);
+  // prevTime = null;
+  setDataAttribute(timerElem, "prevTime", -1);
 
+  timerElem.classList.remove("timer-last-1-min");
+};
 
-let startTimer = (prev, displayedTimerDuration, durationInputMinutes, durationInputSeconds, id) => {
+const updateUiAccordingToTimerState = (
+  durationInputMinutes,
+  durationInputSeconds,
+  newTimeSeconds,
+  countdownIntervalId,
+) => {
+  const timerElem = durationInputMinutes.closest(".timer");
 
-  // Variable timerInterval is given a unique interval ID
-  // Stopping it later on : window.clearInterval(IntervalID)
-  var timerInterval = setInterval(() => {
+  if (newTimeSeconds < 60n) {
+    timerElem.classList.add("timer-last-1-min");
+  } else {
+    timerElem.classList.remove("timer-last-1-min");
+  }
 
-    // Allocate the Interval ID to a certain value
-    allIntervals[id] = timerInterval;
+  if (newTimeSeconds === 0n) {
+    stopTimer(timerElem, countdownIntervalId);
+  }
 
-    let tempTime = new Date().getTime();
-    // If time interval is greater or equal to a second
-    if ((tempTime - prev) >= 1000) {
-      displayedTimerDuration--;
-      durationInputMinutes.value = String(displayedTimerDuration / 60n);
-      durationInputSeconds.value = String(displayedTimerDuration % 60n).padStart(2, "0");
-      prev = prev + 1000;
-    }
+  const timerDurationMinutes = newTimeSeconds / 60n;
+  const timerDurationSeconds = newTimeSeconds % 60n;
+  durationInputMinutes.value = String(timerDurationMinutes);
+  durationInputSeconds.value = String(timerDurationSeconds).padStart(2, "0");
 
-    // Stop the loop when reaches 0
-    if (displayedTimerDuration <= 0) {
-      stopTimer(timerInterval);
-    }
-  }, 100)
-
+  // changing value via JS doesn't trigger oninput, so manually change input width
+  durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
+  durationInputSeconds.style.width = `${durationInputSeconds.value.length}ch`;
   
-}
-
-// Stops timer based on interval id
-let stopTimer = (timerInterval) =>{
-  window.clearInterval(timerInterval);
-}
+  if (!getDataAttribute(timerElem, "running", Boolean)) {
+    durationInputMinutes.readOnly = false;
+    durationInputSeconds.readOnly = false;
+  } else {
+    durationInputMinutes.readOnly = true;
+    durationInputSeconds.readOnly = true;
+  }
+};
 
 document.querySelectorAll(".timer .timer-input-wrapper").forEach((timerInputWrapper) => {
   const durationInputMinutes = timerInputWrapper
@@ -61,16 +75,9 @@ document.querySelectorAll(".timer .timer-input-wrapper").forEach((timerInputWrap
     }
 
     const totalTimerDuration = userInputMinutes * 60n + userInputSeconds;
-    const timerDurationMinutes = totalTimerDuration / 60n;
-    const timerDurationSeconds = totalTimerDuration % 60n;
-
-    // TODO: put below code into separate function
-    durationInputMinutes.value = String(timerDurationMinutes);
-    durationInputSeconds.value = String(timerDurationSeconds).padStart(2, "0");
-    
-    // changing value via JS doesn't trigger oninput, so manually change input width
-    durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
-    durationInputSeconds.style.width = `${durationInputSeconds.value.length}ch`;
+    // no countdownIntervalId so pass 0 (interval/timeout IDs are always non-zero)
+    updateUiAccordingToTimerState(durationInputMinutes, durationInputSeconds,
+        totalTimerDuration, 0);
   });
 });
 
@@ -91,7 +98,7 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
 });
 
 [...document.getElementsByClassName("timer")].forEach((timerElem) => {
-  let prevTime = null;
+  // let prevTime = null;
   let countdownIntervalId;
 
   const durationInputMinutes = timerElem
@@ -101,72 +108,37 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
   const timerStartStopButton = timerElem
       .getElementsByClassName("start-stop-timer")[0];
 
-  const stopTimer = () => {
-    timerElem.dataset.running = "false";
-    clearInterval(countdownIntervalId);
-    prevTime = null;
-
-    // UI updates
-    timerElem.classList.remove("timer-last-1-min");
-  };
-
-  const updateUiAccordingToTimerState = () => {
-    if (timerElem.dataset.running === "false") {
-      durationInputMinutes.readOnly = false;
-      durationInputSeconds.readOnly = false;
-    } else {
-      durationInputMinutes.readOnly = true;
-      durationInputSeconds.readOnly = true;
-    }
-  };
-
   const getCurrentTimerDurationSeconds = () =>
       BigInt(durationInputMinutes.value) * 60n + BigInt(durationInputSeconds.value);
 
   timerStartStopButton.addEventListener("click", () => {
-    if (timerElem.dataset.running === "false") {
-      prevTime = new Date().getTime();
+    if (!getDataAttribute(timerElem, "running", Boolean)) {
+      // prevTime = new Date().getTime();
+      setDataAttribute(timerElem, "prevTime", new Date().getTime());
 
-      // START COUNTING DOWN
-      const countdownFunction = () => {
+      const countdown = () => {
+        const prevTime = getDataAttribute(timerElem, "prevTime", Number);
         const msElapsed = BigInt(new Date().getTime() - prevTime);
         const newTimeSeconds = getCurrentTimerDurationSeconds() - msElapsed / 1000n;
-        const timerDurationMinutes = newTimeSeconds / 60n;
-        const timerDurationSeconds = newTimeSeconds % 60n;
+        
+        updateUiAccordingToTimerState(durationInputMinutes, durationInputSeconds,
+            newTimeSeconds, countdownIntervalId);
 
         if (msElapsed >= 1000n) {
-          // TODO: put below code into separate function
-          durationInputMinutes.value = String(timerDurationMinutes);
-          durationInputSeconds.value = String(timerDurationSeconds).padStart(2, "0");
-
-          // changing value via JS doesn't trigger oninput, so manually change input width
-          durationInputMinutes.style.width = `${durationInputMinutes.value.length}ch`;
-          durationInputSeconds.style.width = `${durationInputSeconds.value.length}ch`;
-          
-          prevTime = new Date().getTime();
-        }
-
-        if (newTimeSeconds < 60n) {
-          timerElem.classList.add("timer-last-1-min");
-        }
-
-        if (timerDurationMinutes === 0n && timerDurationSeconds === 0n) {
-          stopTimer();
-          updateUiAccordingToTimerState();
-          return;
+          setDataAttribute(timerElem, "prevTime", new Date().getTime());
         }
       };
 
       // run once before setting interval to set prevTime and update UI
-      countdownFunction();
+      countdown();
+      countdownIntervalId = setInterval(countdown, 1);
 
-      countdownIntervalId = setInterval(countdownFunction, 1);
-
-      timerElem.dataset.running = "true";
+      setDataAttribute(timerElem, "running", true);
     } else {
-      stopTimer();
+      stopTimer(timerElem, countdownIntervalId);
     }
 
-    updateUiAccordingToTimerState();
+    updateUiAccordingToTimerState(durationInputMinutes, durationInputSeconds,
+        getCurrentTimerDurationSeconds(), countdownIntervalId);
   });
 });
