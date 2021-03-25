@@ -55,6 +55,9 @@ input {
   border-bottom-color: #3399ff;
 }
 
+.timer {
+  transition: color 0.2s;
+}
 .timer[data-running="true"] {
   color: rgb(53, 148, 53);
 }
