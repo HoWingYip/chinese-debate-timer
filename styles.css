@@ -1,5 +1,5 @@
 body {
-  margin: 0 20px;
+  margin: 0 20px 60px;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -7,7 +7,7 @@ h1 {
   margin-bottom: 35px;
 }
 
-input {
+input[type="text"] {
   padding: 0;
   font-family: inherit;
   text-align: center;
@@ -16,14 +16,13 @@ input {
   transition: border-bottom-color 0.2s;
 }
 
-.normal-timer-module {
+.normal-timer {
   position: relative;
   display: flex;
   justify-content: space-between;
   width: 70%;
   margin: 0 auto 20px;
   padding: 20px;
-  /* border: 1px solid black; */
   border-radius: 15px;
   box-shadow: 0 0 20px -3px #bbb;
 }
@@ -44,14 +43,14 @@ input {
   background-color: #000;
 }
 
-.timer-name {
+.normal-timer .timer-name {
   width: calc(100% - 20px);
   font-size: 35px;
   margin-bottom: 15px;
   border-bottom: 1px solid transparent;
 }
 
-.timer-name:focus {
+.normal-timer .timer-name:focus {
   border-bottom-color: #3399ff;
 }
 
@@ -65,7 +64,7 @@ input {
   color: red;
 }
 
-.timer input {
+.timer input[type="text"] {
   border-bottom: 1px solid black;
   outline: none;
   text-align: center;
@@ -73,24 +72,24 @@ input {
   color: inherit;
   transition: width 0.2s, border-bottom-color 0.2s;
 }
-.timer[data-running="true"] input {
+.timer[data-running="true"] input[type="text"] {
   width: 2ch;
   border-bottom-color: transparent;
 }
 
-.timer input.time-remaining-minutes {
+.timer input[type="text"].time-remaining-minutes {
   width: 1ch;
 }
 
-.timer input.time-remaining-seconds {
+.timer input[type="text"].time-remaining-seconds {
   width: 2ch;
 }
 
-.timer input:focus {
+.timer input[type="text"]:focus {
   border-bottom-color: #3399ff;
 }
 
-.timer.timer-running input:focus {
+.timer.timer-running input[type="text"]:focus {
   border-bottom-color: transparent;
 }
 
@@ -122,31 +121,39 @@ input {
   display: inline;
 }
 
-#add-timer-module {
-  margin-top: 15px;
-  margin-left: 50%;
-  transform: translateX(-50%);
+#add-timer-buttons-wrapper {
+  display: flex;
+  margin: 35px auto 0;
+  justify-content: center;
+}
+
+.add-timer {
+  display: inline-block;
   padding: 10px 20px;
   border: none;
   border-radius: 9999999px;
   background-color: #0f6bea;
   color: #fff;
   outline: none;
-  font-size: 20px;
+  font-size: 18px;
   font-family: inherit;
   box-shadow: 0 0 8px 0 #0e73ff73;
   transition: background-color 0.2s, box-shadow 0.2s;
 }
-#add-timer-module:hover {
+.add-timer:hover {
   background-color: #0d60d3;
   box-shadow: 0 0 11px 1px #0e73ff73;
 }
-#add-timer-module:active {
+.add-timer:active {
   background-color: #0f53b3;
 }
+.add-timer:not(:last-child) {
+  margin-right: 20px;
+}
 
-#add-timer-module .material-icons {
+.add-timer .material-icons {
   margin-top: -5px;
   margin-left: -4px;
   vertical-align: middle;
+  font-size: inherit;
 }

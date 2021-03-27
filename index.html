@@ -13,41 +13,50 @@
 <body>
   <h1>Debate Timer</h1>
 
-  <div class="normal-timer-module">
-    <div class="timer-left">
-      <input type="text" class="timer-name" value="1st prop">
-      <div class="timer" data-running="false">
-        <div class="timer-input-wrapper">
-          <input type="text" class="time-remaining-minutes" value="0">m
-          <input type="text" class="time-remaining-seconds" value="00">s
+  <div id="timer-sections">
+    <div class="normal-timer">
+      <div class="timer-left">
+        <input type="text" class="timer-name" value="Section 1 Timer 1">
+        <div class="timer" data-running="false">
+          <div class="timer-input-wrapper">
+            <input type="text" class="time-remaining-minutes" value="0">m
+            <input type="text" class="time-remaining-seconds" value="00">s
+          </div>
+          <button class="start-stop-timer"></button>
         </div>
-        <button class="start-stop-timer"></button>
       </div>
-    </div>
-
-    <div class="timer-separator"></div>
-    <div class="timer-right">
-      <input type="text" class="timer-name" value="1st opp">
-      <div class="timer" data-running="false">
-        <div class="timer-input-wrapper">
-          <input type="text" class="time-remaining-minutes" value="0">m
-          <input type="text" class="time-remaining-seconds" value="00">s
+  
+      <div class="timer-separator"></div>
+      <div class="timer-right">
+        <input type="text" class="timer-name" value="Section 1 Timer 2">
+        <div class="timer" data-running="false">
+          <div class="timer-input-wrapper">
+            <input type="text" class="time-remaining-minutes" value="0">m
+            <input type="text" class="time-remaining-seconds" value="00">s
+          </div>
+          <button class="start-stop-timer"></button>
         </div>
-        <button class="start-stop-timer"></button>
       </div>
     </div>
   </div>
 
-  <!-- <div class="chess-clock-timer-module">
+  <!-- <div class="chess-clock-timer">
 
   </div> -->
 
-  <button id="add-timer-module">
-    <span class="material-icons">add</span>
-    Add new timer
-  </button>
+  <div id="add-timer-buttons-wrapper">
+    <button id="add-normal-timer" class="add-timer">
+      <span class="material-icons">add</span>
+      Add new normal timer
+    </button>
+    <button id="add-chess-clock-timer" class="add-timer">
+      <span class="material-icons">add</span>
+      Add new chess clock timer
+    </button>
+  </div>
 
   <script src="utility.js"></script>
   <script src="timer.js"></script>
+  <script src="add-timer.js"></script>
 </body>
 </html>
