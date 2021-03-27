@@ -1,5 +1,5 @@
 body {
-  margin: auto 20px;
+  margin: 0 20px;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -16,7 +16,7 @@ input {
   transition: border-bottom-color 0.2s;
 }
 
-.regular-timer-module {
+.normal-timer-module {
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -120,4 +120,33 @@ input {
 }
 .timer[data-running="true"] button.start-stop-timer::after {
   display: inline;
+}
+
+#add-timer-module {
+  margin-top: 15px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9999999px;
+  background-color: #0f6bea;
+  color: #fff;
+  outline: none;
+  font-size: 20px;
+  font-family: inherit;
+  box-shadow: 0 0 8px 0 #0e73ff73;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+#add-timer-module:hover {
+  background-color: #0d60d3;
+  box-shadow: 0 0 11px 1px #0e73ff73;
+}
+#add-timer-module:active {
+  background-color: #0f53b3;
+}
+
+#add-timer-module .material-icons {
+  margin-top: -5px;
+  margin-left: -4px;
+  vertical-align: middle;
 }
