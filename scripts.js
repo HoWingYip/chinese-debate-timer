@@ -12,10 +12,14 @@ const getDataAttribute = (element, attributeName, desiredType = String) => {
   return desiredType(element.dataset[attributeName]);
 };
 
+const getCurrentTimerDurationSeconds = (
+  durationInputMinutes,
+  durationInputSeconds
+) => BigInt(durationInputMinutes.value) * 60n + BigInt(durationInputSeconds.value);
+
 const stopTimer = (timerElem, countdownIntervalId) => {
   setDataAttribute(timerElem, "running", false);
   clearInterval(countdownIntervalId);
-  // prevTime = null;
   setDataAttribute(timerElem, "prevTime", -1);
 
   timerElem.classList.remove("timer-last-1-min");
@@ -98,7 +102,6 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
 });
 
 [...document.getElementsByClassName("timer")].forEach((timerElem) => {
-  // let prevTime = null;
   let countdownIntervalId;
 
   const durationInputMinutes = timerElem
@@ -108,18 +111,15 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
   const timerStartStopButton = timerElem
       .getElementsByClassName("start-stop-timer")[0];
 
-  const getCurrentTimerDurationSeconds = () =>
-      BigInt(durationInputMinutes.value) * 60n + BigInt(durationInputSeconds.value);
-
   timerStartStopButton.addEventListener("click", () => {
     if (!getDataAttribute(timerElem, "running", Boolean)) {
-      // prevTime = new Date().getTime();
       setDataAttribute(timerElem, "prevTime", new Date().getTime());
 
       const countdown = () => {
         const prevTime = getDataAttribute(timerElem, "prevTime", Number);
         const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds() - msElapsed / 1000n;
+        const newTimeSeconds = getCurrentTimerDurationSeconds(durationInputMinutes,
+            durationInputSeconds) - msElapsed / 1000n;
         
         updateUiAccordingToTimerState(durationInputMinutes, durationInputSeconds,
             newTimeSeconds, countdownIntervalId);
@@ -139,6 +139,7 @@ document.querySelectorAll(".timer input").forEach((timerInput) => {
     }
 
     updateUiAccordingToTimerState(durationInputMinutes, durationInputSeconds,
-        getCurrentTimerDurationSeconds(), countdownIntervalId);
+        getCurrentTimerDurationSeconds(durationInputMinutes, durationInputSeconds),
+        countdownIntervalId);
   });
 });
