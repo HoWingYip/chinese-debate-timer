@@ -131,6 +131,26 @@ for (const timerElem of document.getElementsByClassName("timer")) {
   addTimerEventListeners(timerElem);
 }
 
+// Chess clock section
+let chessTimer = document.getElementsByClassName("chess-timer")[0]
+let buttonPanel = chessTimer.getElementsByClassName("button-panel")[0]
+let swapButton = buttonPanel.getElementsByClassName("swap")[0]
+let pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0]
+
+swapButton.addEventListener("click", () => {
+  console.log("swap at " + chessTimer)
+  timerContainer = chessTimer.getElementsByClassName("chess-timer-internal-container")[0]
+  timerLeft = timerContainer.querySelectorAll(".timer")[0]
+  timerRight = timerContainer.querySelectorAll(".timer")[1]
+  
+  if(timerLeft.dataset.running === "true" && timerRight.dataset.running === "true"){
+    console.log("Both are running")
+  }
+  else{
+    console.log("Either one or none is running")
+  }
+  
+})
 
 
 
