@@ -17,6 +17,7 @@ const updateUiAccordingToTimerState = (
   newTimeSeconds,
   countdownIntervalId,
 ) => {
+  // Selects closest timer elem
   const timerElem = durationInputMinutes.closest(".timer");
 
   if (newTimeSeconds < 60n) {
@@ -25,10 +26,12 @@ const updateUiAccordingToTimerState = (
     timerElem.classList.remove("timer-last-1-min");
   }
 
+  // Stops
   if (newTimeSeconds === 0n) {
     stopTimer(timerElem, countdownIntervalId);
   }
 
+  // Changes the timer values
   const timerDurationMinutes = newTimeSeconds / 60n;
   const timerDurationSeconds = newTimeSeconds % 60n;
   durationInputMinutes.value = String(timerDurationMinutes);
@@ -127,6 +130,14 @@ const addTimerEventListeners = (timerElem) => {
 for (const timerElem of document.getElementsByClassName("timer")) {
   addTimerEventListeners(timerElem);
 }
+
+
+
+
+
+
+
+
 
 // const addTimerInputWrapperEventListener = (timerInputWrapper) => {
 //   timerInputWrapper.addEventListener("focusout", () => {
