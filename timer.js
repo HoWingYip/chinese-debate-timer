@@ -30,10 +30,12 @@ const updateUiAccordingToTimerState = (
     timerElem.classList.remove("timer-last-1-min");
   }
 
+  // Stops
   if (newTimeSeconds === 0n) {
     stopTimer(timerElem, countdownIntervalId);
   }
 
+  // Changes the timer values
   const timerDurationMinutes = newTimeSeconds / 60n;
   const timerDurationSeconds = newTimeSeconds % 60n;
   durationInputMinutes.value = String(timerDurationMinutes);
@@ -114,3 +116,23 @@ const addTimerEventListeners = (timerElem) => {
 for (const timerElem of document.getElementsByClassName("timer")) {
   addTimerEventListeners(timerElem);
 }
+
+// Chess clock section
+const chessTimer = document.getElementsByClassName("chess-timer")[0];
+const buttonPanel = chessTimer.getElementsByClassName("button-panel")[0];
+const swapButton = buttonPanel.getElementsByClassName("swap")[0];
+const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
+
+swapButton.addEventListener("click", () => {
+  console.log("swap at " + chessTimer);
+  timerContainer = chessTimer.getElementsByClassName("chess-timer-internal-container")[0];
+  timerLeft = timerContainer.querySelectorAll(".timer")[0];
+  timerRight = timerContainer.querySelectorAll(".timer")[1];
+
+  if (timerLeft.dataset.running === "true" && timerRight.dataset.running === "true") {
+    console.log("Both are running");
+  } else {
+    console.log("Either one or none is running");
+  }
+
+});

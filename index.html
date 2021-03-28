@@ -14,6 +14,7 @@
   <h1>Debate Timer</h1>
 
   <div id="timer-sections">
+
     <div class="normal-timer">
       <div class="timer-left">
         <input type="text" class="timer-name" value="Section 1 Timer 1">
@@ -41,9 +42,43 @@
     </div>
   </div>
 
-  <!-- <div class="chess-clock-timer">
+  <!-- Chess Clock Section -->
+  <div class="chess-clock-timer">
+    
+    <div class="chess-timer">
+      <input type="text" class="timer-name" value="Chess Clock 1">
 
-  </div> -->
+      <div class= "chess-timer-internal-container">
+        <div class="timer-left">
+          <div class="timer" data-running="false">
+            <div class="timer-input-wrapper">
+              <input type="text" class="time-remaining-minutes" value="0">m
+              <input type="text" class="time-remaining-seconds" value="00">s
+            </div>
+            <button class="start-stop-timer"></button>
+          </div>
+        </div>
+    
+        <div class="timer-separator"></div>
+        <div class="timer-right">
+          <div class="timer" data-running="false">
+            <div class="timer-input-wrapper">
+              <input type="text" class="time-remaining-minutes" value="0">m
+              <input type="text" class="time-remaining-seconds" value="00">s
+            </div>
+            <button class="start-stop-timer"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-panel">
+        <button class="swap">Swap</button>
+        <button class="chess-clock-pause">Pause</button>
+      </div>
+
+
+    </div>
+  </div>
 
   <div id="add-timer-buttons-wrapper">
     <button id="add-normal-timer" class="add-timer">

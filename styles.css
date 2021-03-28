@@ -157,3 +157,58 @@ input[type="text"] {
   vertical-align: middle;
   font-size: inherit;
 }
+
+
+.chess-timer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%;
+  margin: 0 auto 20px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px -3px #bbb;
+}
+
+.chess-timer .chess-timer-internal-container{
+  width: 100%;
+  margin-top: 30px;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: row;
+}
+
+.chess-timer .timer-name {
+  width: 80%;
+  margin: auto;
+  font-size: 35px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid transparent;
+}
+
+.chess-timer .timer-name:focus {
+  border-bottom-color: #3399ff;
+}
+
+.chess-timer-internal-container .timer-separator {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 1px;
+  height: 20%;
+  transform: translateY(-50%);
+  background-color: #000;
+}
+
+.chess-timer .button-panel{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.chess-timer .button-panel button{
+  width: 10%;
+  margin: 0 5%;
+}
