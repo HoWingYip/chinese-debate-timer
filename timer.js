@@ -124,21 +124,6 @@ for(const normalTimer of document.getElementsByClassName("normal-timer")){
 
 // Chess clock section
 
-
-
-// swapButton.addEventListener("click", () => {
-//   console.log("swap at " + chessTimer);
-//   timerContainer = chessTimer.getElementsByClassName("chess-timer-internal-container")[0];
-//   timerLeft = timerContainer.querySelectorAll(".timer")[0];
-//   timerRight = timerContainer.querySelectorAll(".timer")[1];
-
-//   if (timerLeft.dataset.running === "true" && timerRight.dataset.running === "true") {
-//     console.log("Both are running");
-//   } else {
-//     console.log("Either one or none is running");
-//   }
-// });
-
 const addChessTimerEventListeners = (chessTimerElem) => {
 
   let IntervalStorage = {}
@@ -153,6 +138,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const buttonPanel = chessTimerElem.getElementsByClassName("button-panel")[0];
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
+  const clearButton = buttonPanel.getElementsByClassName("clear")[0];
 
   // Starting the initial timings
   const startClockInitialButton = (button) => {
@@ -205,7 +191,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       timerElem.dataset.running="true";
   }
 
-  // 
   leftTimerButton.addEventListener("click", startClockInitialButton);
   rightTimerButton.addEventListener("click", startClockInitialButton);
 
@@ -226,7 +211,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     }
   })
 
-  pauseButton.addEventListener("click", () => {
+  const pause = () => {
     if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
       side = leftTimer.parentElement.classList.item(0);
       stopTimer(leftTimer, IntervalStorage[side]);
@@ -237,6 +222,13 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       stopTimer(rightTimer, IntervalStorage[side])
       rightTimer.dataset.running = "false";
     }
+  }
+  pauseButton.addEventListener("click", pause())
+
+  clearButton.addEventListener("click", () => {
+    pause();
+    updateUiAccordingToTimerState(leftTimer, 0n, IntervalStorage[leftTimer.parentElement.classList.item(0)]);
+    updateUiAccordingToTimerState(rightTimer, 0n, IntervalStorage[rightTimer.parentElement.classList.item(0)]);
   })
 
   // Wrapping code
