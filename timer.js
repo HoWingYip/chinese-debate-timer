@@ -155,8 +155,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
 
   // Starting the initial timings
-  const startClock = (button) => {
-
+  const startClockInitialButton = (button) => {
     timerElem = button.srcElement.closest(".timer");
 
     const otherTimerElem = Array.from(timerContainer.getElementsByClassName("timer")).filter((elem) =>  elem != timerElem)[0]
@@ -179,8 +178,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       countdown();
       countdownIntervalId = setInterval(countdown, 1);
       // OH NO MY QUEEN
-      side = 
-      console.log(side);
+      side = timerElem.parentElement.classList.item(0)
       IntervalStorage[side] = countdownIntervalId;
       timerElem.dataset.running="true";
 
@@ -188,17 +186,46 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     updateUiAccordingToTimerState(timerElem, getCurrentTimerDurationSeconds(timerElem), countdownIntervalId);
   }
 
-  leftTimerButton.addEventListener("click", startClock);
-  rightTimerButton.addEventListener("click", startClock);
+  const startClockFromTimerElem = (timerElem) => {
+    prevTime = new Date().getTime();
+      const countdown = () => {
+        const msElapsed = BigInt(new Date().getTime() - prevTime);
+        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElem) - msElapsed / 1000n;
+        updateUiAccordingToTimerState(timerElem, newTimeSeconds, countdownIntervalId);
+        if (msElapsed >= 1000n) {
+          prevTime = new Date().getTime();
+        }
+      };
+
+      countdown();
+      countdownIntervalId = setInterval(countdown, 1);
+      // OH NO MY QUEEN
+      side = timerElem.parentElement.classList.item(0)
+      IntervalStorage[side] = countdownIntervalId;
+      timerElem.dataset.running="true";
+  }
+
+  // 
+  // 
+  // 
+  // 
+  leftTimerButton.addEventListener("click", startClockInitialButton);
+  rightTimerButton.addEventListener("click", startClockInitialButton);
 
   // Implementing swapping mechanics
   swapButton.addEventListener("click", () => {
     if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
-      console.log("Left");
-      // console.log(IntervalStorage["left"])
+      side = leftTimer.parentElement.classList.item(0)
+      stopTimer(leftTimer, IntervalStorage[side])
+      leftTimer.dataset.running = "false";
+      startClockFromTimerElem(rightTimer)
+
     }
     else if(leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true"){
-      console.log("right")
+      side = rightTimer.parentElement.classList.item(0)
+      stopTimer(rightTimer, IntervalStorage[side])
+      rightTimer.dataset.running = "false";
+      startClockFromTimerElem(leftTimer)
     }
   })
 
