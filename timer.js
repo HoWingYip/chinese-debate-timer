@@ -206,33 +206,38 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   }
 
   // 
-  // 
-  // 
-  // 
   leftTimerButton.addEventListener("click", startClockInitialButton);
   rightTimerButton.addEventListener("click", startClockInitialButton);
 
   // Implementing swapping mechanics
   swapButton.addEventListener("click", () => {
     if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
-      side = leftTimer.parentElement.classList.item(0)
-      stopTimer(leftTimer, IntervalStorage[side])
+      side = leftTimer.parentElement.classList.item(0);
+      stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
-      startClockFromTimerElem(rightTimer)
+      startClockFromTimerElem(rightTimer);
 
     }
     else if(leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true"){
-      side = rightTimer.parentElement.classList.item(0)
+      side = rightTimer.parentElement.classList.item(0);
       stopTimer(rightTimer, IntervalStorage[side])
       rightTimer.dataset.running = "false";
-      startClockFromTimerElem(leftTimer)
+      startClockFromTimerElem(leftTimer);
     }
   })
 
-
-
-
-
+  pauseButton.addEventListener("click", () => {
+    if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
+      side = leftTimer.parentElement.classList.item(0);
+      stopTimer(leftTimer, IntervalStorage[side]);
+      leftTimer.dataset.running = "false";
+    }
+    if(rightTimer.dataset.running === "true"){
+      side = rightTimer.parentElement.classList.item(0);
+      stopTimer(rightTimer, IntervalStorage[side])
+      rightTimer.dataset.running = "false";
+    }
+  })
 
   // Wrapping code
   const leftTimerWrapper = leftTimer.getElementsByClassName("timer-input-wrapper")[0];
