@@ -223,7 +223,9 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       rightTimer.dataset.running = "false";
     }
   }
-  pauseButton.addEventListener("click", pause())
+  pauseButton.addEventListener("click", () => {
+    pause()
+  });
 
   clearButton.addEventListener("click", () => {
     pause();
