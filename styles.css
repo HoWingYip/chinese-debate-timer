@@ -247,4 +247,28 @@ input[type="text"] {
   outline: none;
 }
 
+.delete-button-container{
+  position: absolute;
+  top: -10px;
+  left: -10px;
+}
 
+.delete-button-container .delete{
+  background-image: url("./img/delete.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10%;
+  transition: all .2s ease-in-out;
+}
+
+.delete-button-container .delete:active{
+  border: none;
+  outline: none;
+}
+
+.delete-button-container .delete:hover{
+  transform: scale(1.1);
+}

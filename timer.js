@@ -113,9 +113,17 @@ const addTimerEventListeners = (timerElem) => {
   }
 };
 
+const addDeleteButtonListener = (normalTimer) => {
+  const deleteButton = normalTimer.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
+  deleteButton.addEventListener("click", () => {
+    normalTimer.remove();
+  });
+}
+
 
 // Adds only to normal Timer set
 for(const normalTimer of document.getElementsByClassName("normal-timer")){
+  addDeleteButtonListener(normalTimer);
   for (const timerElem of normalTimer.getElementsByClassName("timer")) {
     addTimerEventListeners(timerElem);
   }
@@ -139,6 +147,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
   const clearButton = buttonPanel.getElementsByClassName("clear")[0];
+  const deleteButton = chessTimerElem.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
 
   // Starting the initial timings
   const startClockInitialButton = (button) => {
@@ -185,7 +194,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
       countdown();
       countdownIntervalId = setInterval(countdown, 1);
-      // OH NO MY QUEEN
       side = timerElem.parentElement.classList.item(0)
       IntervalStorage[side] = countdownIntervalId;
       timerElem.dataset.running="true";
@@ -259,8 +267,16 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       }, 0);
     });
   }
+
+  deleteButton.addEventListener("click", () => {
+    pause();
+    chessTimerElem.remove();
+  })
+
 };
 
 for(const chessTimerElem of document.getElementsByClassName("chess-timer")){
   addChessTimerEventListeners(chessTimerElem);
 }
+
+

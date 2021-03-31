@@ -34,12 +34,17 @@ addNormalTimerButton.addEventListener("click", () => {
           <button class="start-stop-timer"></button>
         </div>
       </div>
+      <div class="delete-button-container">
+        <button class="delete"></button>
+      </div>
     </div>`,
   );
 
   const addedTimerSection = [...timerSectionsDiv.childNodes].reverse()
     .find(nodeIsElement);
 
+  
+  addDeleteButtonListener(addedTimerSection);
   for (const timerElem of addedTimerSection.getElementsByClassName("timer")) {
     addTimerEventListeners(timerElem);
   }
@@ -82,6 +87,9 @@ addChessClockTimerButton.addEventListener("click", () => {
       <button class="clear">Clear</button>
       <button class="swap">Swap</button>
       <button class="chess-clock-pause">Pause</button>
+    </div>
+    <div class="delete-button-container">
+      <button class="delete"></button>
     </div>
   </div>`,
   );
