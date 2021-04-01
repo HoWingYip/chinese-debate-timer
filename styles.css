@@ -5,6 +5,11 @@ body {
 
 h1 {
   margin-bottom: 35px;
+  text-align: center;
+}
+
+button {
+  font-family: inherit;
 }
 
 input[type="text"] {
@@ -96,7 +101,6 @@ input[type="text"] {
 .timer button.start-stop-timer {
   display: block;
   margin: 25px auto 0;
-  font-family: inherit;
 }
 
 /* TODO: replace text content of pseudo-elements with background images */
@@ -136,7 +140,6 @@ input[type="text"] {
   color: #fff;
   outline: none;
   font-size: 18px;
-  font-family: inherit;
   box-shadow: 0 0 8px 0 #0e73ff73;
   transition: background-color 0.2s, box-shadow 0.2s;
 }
@@ -171,9 +174,9 @@ input[type="text"] {
   box-shadow: 0 0 20px -3px #bbb;
 }
 
-.chess-timer .chess-timer-internal-container{
+.chess-timer .chess-timer-internal-container {
+  position: relative;
   width: 100%;
-  margin-top: 30px;
   justify-content: space-evenly;
   display: flex;
   flex-direction: row;
@@ -191,69 +194,35 @@ input[type="text"] {
   border-bottom-color: #3399ff;
 }
 
+.chess-timer-internal-container .timer-left,
+.chess-timer-internal-container .timer-right {
+  padding-bottom: 0;
+}
+
 .chess-timer-internal-container .timer-separator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1px;
-  height: 35%;
+  height: 100%;
   transform: translateY(-50%);
   background-color: #000;
 }
 
-.chess-timer .button-panel{
-  margin: 2% 0;
-  width: 100%;
-  height: 35px;
+.chess-timer .button-panel {
   display: flex;
-  flex-direction: row;
+  margin: 26px 0 5px 50%;
+  transform: translateX(-50%);
   justify-content: center;
 }
 
-.chess-timer .button-panel button{
-  font-weight: bold;
-  color: white;
-  background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
-  box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
-  width: 10%;
-  height: 100%;
-  margin: 0 5%;
-  border-radius: 1em;
-  border: none;
-  cursor: pointer;
-  text-align:center;
-  background-size: 300% 100%;
-  moz-transition: all .4s ease-in-out;
-  -o-transition: all .4s ease-in-out;
-  -webkit-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
+.chess-timer .button-panel button:not(:last-child) {
+  margin-right: 10px;
 }
 
-.chess-timer .button-panel button:active{
-  background-color: rgb(161, 197, 255);
-  box-shadow: 0 0 0 0 ;
-}
-
-.chess-timer .button-panel button:hover{
-  background-position: 100% 0;
-  moz-transition: all .4s ease-in-out;
-  -o-transition: all .4s ease-in-out;
-  -webkit-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
-}
-
-.chess-timer .button-panel button:focus{
-  border: none;
-  outline: none;
-}
-
-.delete-button-container{
+.delete-button-container {
   position: absolute;
   top: -10px;
   left: -10px;
 }
 
-.delete-button-container .delete{
+.delete-button-container .delete {
   background-image: url("./img/delete.svg");
   background-repeat: no-repeat;
   background-size: contain;
@@ -264,11 +233,11 @@ input[type="text"] {
   transition: all .2s ease-in-out;
 }
 
-.delete-button-container .delete:active{
+.delete-button-container .delete:active {
   border: none;
   outline: none;
 }
 
-.delete-button-container .delete:hover{
+.delete-button-container .delete:hover {
   transform: scale(1.1);
 }

@@ -118,11 +118,11 @@ const addDeleteButtonListener = (normalTimer) => {
   deleteButton.addEventListener("click", () => {
     normalTimer.remove();
   });
-}
+};
 
 
 // Adds only to normal Timer set
-for(const normalTimer of document.getElementsByClassName("normal-timer")){
+for (const normalTimer of document.getElementsByClassName("normal-timer")) {
   addDeleteButtonListener(normalTimer);
   for (const timerElem of normalTimer.getElementsByClassName("timer")) {
     addTimerEventListeners(timerElem);
@@ -134,15 +134,15 @@ for(const normalTimer of document.getElementsByClassName("normal-timer")){
 
 const addChessTimerEventListeners = (chessTimerElem) => {
 
-  let IntervalStorage = {}
+  const IntervalStorage = {};
   let prevTime = null;
   let countdownIntervalId;
 
   const timerContainer = chessTimerElem.getElementsByClassName("chess-timer-internal-container")[0];
   const leftTimer = timerContainer.getElementsByClassName("timer")[0];
   const rightTimer = timerContainer.getElementsByClassName("timer")[1];
-  const leftTimerButton = leftTimer.getElementsByClassName("start-stop-timer")[0]
-  const rightTimerButton = rightTimer.getElementsByClassName("start-stop-timer")[0]
+  const leftTimerButton = leftTimer.getElementsByClassName("start-stop-timer")[0];
+  const rightTimerButton = rightTimer.getElementsByClassName("start-stop-timer")[0];
   const buttonPanel = chessTimerElem.getElementsByClassName("button-panel")[0];
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
@@ -153,13 +153,13 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const startClockInitialButton = (button) => {
     timerElem = button.srcElement.closest(".timer");
 
-    const otherTimerElem = Array.from(timerContainer.getElementsByClassName("timer")).filter((elem) =>  elem != timerElem)[0]
+    const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
+      .filter((elem) => elem !== timerElem)[0];
 
-    if(otherTimerElem.dataset.running === "true" || timerElem.dataset.running === "true"){
+    if (otherTimerElem.dataset.running === "true" || timerElem.dataset.running === "true") {
       stopTimer(otherTimerElem, countdownIntervalId);
       stopTimer(timerElem, countdownIntervalId);
-    }
-    else{
+    } else {
       prevTime = new Date().getTime();
       const countdown = () => {
         const msElapsed = BigInt(new Date().getTime() - prevTime);
@@ -173,73 +173,72 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       countdown();
       countdownIntervalId = setInterval(countdown, 1);
       // OH NO MY QUEEN
-      side = timerElem.parentElement.classList.item(0)
+      side = timerElem.parentElement.classList.item(0);
       IntervalStorage[side] = countdownIntervalId;
-      timerElem.dataset.running="true";
+      timerElem.dataset.running = "true";
 
     }
     updateUiAccordingToTimerState(timerElem, getCurrentTimerDurationSeconds(timerElem), countdownIntervalId);
-  }
+  };
 
   const startClockFromTimerElem = (timerElem) => {
     prevTime = new Date().getTime();
-      const countdown = () => {
-        const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElem) - msElapsed / 1000n;
-        updateUiAccordingToTimerState(timerElem, newTimeSeconds, countdownIntervalId);
-        if (msElapsed >= 1000n) {
-          prevTime = new Date().getTime();
-        }
-      };
+    const countdown = () => {
+      const msElapsed = BigInt(new Date().getTime() - prevTime);
+      const newTimeSeconds = getCurrentTimerDurationSeconds(timerElem) - msElapsed / 1000n;
+      updateUiAccordingToTimerState(timerElem, newTimeSeconds, countdownIntervalId);
+      if (msElapsed >= 1000n) {
+        prevTime = new Date().getTime();
+      }
+    };
 
-      countdown();
-      countdownIntervalId = setInterval(countdown, 1);
-      side = timerElem.parentElement.classList.item(0)
-      IntervalStorage[side] = countdownIntervalId;
-      timerElem.dataset.running="true";
-  }
+    countdown();
+    countdownIntervalId = setInterval(countdown, 1);
+    side = timerElem.parentElement.classList.item(0);
+    IntervalStorage[side] = countdownIntervalId;
+    timerElem.dataset.running = "true";
+  };
 
   leftTimerButton.addEventListener("click", startClockInitialButton);
   rightTimerButton.addEventListener("click", startClockInitialButton);
 
   // Implementing swapping mechanics
   swapButton.addEventListener("click", () => {
-    if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
+    if (leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false") {
       side = leftTimer.parentElement.classList.item(0);
       stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
       startClockFromTimerElem(rightTimer);
 
-    }
-    else if(leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true"){
+    } else if (leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true") {
       side = rightTimer.parentElement.classList.item(0);
-      stopTimer(rightTimer, IntervalStorage[side])
+      stopTimer(rightTimer, IntervalStorage[side]);
       rightTimer.dataset.running = "false";
       startClockFromTimerElem(leftTimer);
     }
-  })
+  });
 
   const pause = () => {
-    if(leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false"){
+    if (leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false") {
       side = leftTimer.parentElement.classList.item(0);
       stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
     }
-    if(rightTimer.dataset.running === "true"){
+    if (rightTimer.dataset.running === "true") {
       side = rightTimer.parentElement.classList.item(0);
-      stopTimer(rightTimer, IntervalStorage[side])
+      stopTimer(rightTimer, IntervalStorage[side]);
       rightTimer.dataset.running = "false";
     }
-  }
+  };
   pauseButton.addEventListener("click", () => {
-    pause()
+    pause();
   });
 
   clearButton.addEventListener("click", () => {
     pause();
     updateUiAccordingToTimerState(leftTimer, 0n, IntervalStorage[leftTimer.parentElement.classList.item(0)]);
     updateUiAccordingToTimerState(rightTimer, 0n, IntervalStorage[rightTimer.parentElement.classList.item(0)]);
-  })
+  });
 
   // Wrapping code
   const leftTimerWrapper = leftTimer.getElementsByClassName("timer-input-wrapper")[0];
@@ -251,7 +250,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   rightTimerWrapper.addEventListener("focusout", () => {
     updateUiAccordingToTimerState(rightTimer, getCurrentTimerDurationSeconds(rightTimer), 0);
   });
-  
+
   for (const timerInput of getMinutesAndSecondsInputs(chessTimerElem)) {
     timerInput.addEventListener("keypress", (event) => {
       if (event.key < "0" || event.key > "9") {
@@ -271,11 +270,11 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   deleteButton.addEventListener("click", () => {
     pause();
     chessTimerElem.remove();
-  })
+  });
 
 };
 
-for(const chessTimerElem of document.getElementsByClassName("chess-timer")){
+for (const chessTimerElem of document.getElementsByClassName("chess-timer")) {
   addChessTimerEventListeners(chessTimerElem);
 }
 
