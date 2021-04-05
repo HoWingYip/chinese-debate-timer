@@ -30,12 +30,10 @@ const updateUiAccordingToTimerState = (
     timerElem.classList.remove("timer-last-1-min");
   }
 
-  // Stops
   if (newTimeSeconds === 0n) {
     stopTimer(timerElem, countdownIntervalId);
   }
 
-  // Changes the timer values
   const timerDurationMinutes = newTimeSeconds / 60n;
   const timerDurationSeconds = newTimeSeconds % 60n;
   durationInputMinutes.value = String(timerDurationMinutes);
@@ -150,8 +148,8 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const deleteButton = chessTimerElem.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
 
   // Starting the initial timings
-  const startClockInitialButton = (button) => {
-    timerElem = button.srcElement.closest(".timer");
+  const startClockInitialButton = (event) => {
+    timerElem = event.target.closest(".timer");
 
     const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
       .filter((elem) => elem !== timerElem)[0];
@@ -172,7 +170,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
       countdown();
       countdownIntervalId = setInterval(countdown, 1);
-      // OH NO MY QUEEN
       side = timerElem.parentElement.classList.item(0);
       IntervalStorage[side] = countdownIntervalId;
       timerElem.dataset.running = "true";
@@ -202,7 +199,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   leftTimerButton.addEventListener("click", startClockInitialButton);
   rightTimerButton.addEventListener("click", startClockInitialButton);
 
-  // Implementing swapping mechanics
   swapButton.addEventListener("click", () => {
     if (leftTimer.dataset.running === "true" && rightTimer.dataset.running === "false") {
       side = leftTimer.parentElement.classList.item(0);
@@ -240,7 +236,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     updateUiAccordingToTimerState(rightTimer, 0n, IntervalStorage[rightTimer.parentElement.classList.item(0)]);
   });
 
-  // Wrapping code
   const leftTimerWrapper = leftTimer.getElementsByClassName("timer-input-wrapper")[0];
   leftTimerWrapper.addEventListener("focusout", () => {
     updateUiAccordingToTimerState(leftTimer, getCurrentTimerDurationSeconds(leftTimer), 0);
