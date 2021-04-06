@@ -156,12 +156,10 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
       if(timerElem.dataset.running === "true"){
         side = timerElem.parentElement.classList.item(0);
-        console.log(side);
         stopTimer(timerElem, IntervalStorage[side]);
       }
       if(otherTimerElem.dataset.running === "true"){
         side = otherTimerElem.parentElement.classList.item(0);
-        console.log(side);
         stopTimer(otherTimerElem, IntervalStorage[side]);
       }
       
@@ -181,7 +179,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
         const msElapsed = BigInt(new Date().getTime() - prevTime);
         const newTimeSeconds = getCurrentTimerDurationSeconds(toUpdateTimerElem) - msElapsed / 1000n;
         updateUiAccordingToTimerState(toUpdateTimerElem, newTimeSeconds, countdownIntervalId);
-        // console.log(String(countdownIntervalId) + " : " + String(timerElem.parentElement.classList.item(0)))
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
         }
