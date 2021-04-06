@@ -97,5 +97,4 @@ addChessClockTimerButton.addEventListener("click", () => {
     .find(nodeIsElement);
 
   addChessTimerEventListeners(addedChessTimerSection);
-  
 });

@@ -131,7 +131,7 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 let IntervalStorage = {};
 const addChessTimerEventListeners = (chessTimerElem) => {
 
-  
+
   let prevTime = null;
   let countdownIntervalId;
 
@@ -179,8 +179,8 @@ const addChessTimerEventListeners = (chessTimerElem) => {
         }
 
         const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds(toUpdateTimerElem) - msElapsed / 1000n;
-        updateUiAccordingToTimerState(toUpdateTimerElem, newTimeSeconds, countdownIntervalId);
+        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElemToUpdate) - msElapsed / 1000n;
+        updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
         // console.log(String(countdownIntervalId) + " : " + String(timerElem.parentElement.classList.item(0)))
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
