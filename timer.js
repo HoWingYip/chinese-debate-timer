@@ -128,7 +128,7 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 }
 
 // Chess clock section
-const IntervalStorage = {};
+let IntervalStorage = {};
 const addChessTimerEventListeners = (chessTimerElem) => {
 
   
@@ -148,17 +148,27 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
   // Starting the initial timings
   const startClockInitialButton = (event) => {
-    timerElem = event.target.closest(".timer");
 
-    if (timerElem.dataset.running === "true") {
-      side = timerElem.parentElement.classList.item(0);
-      stopTimer(timerElem, IntervalStorage[side]);
-    } 
+    timerElem = event.target.closest(".timer");
+    const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
+      .filter((elem) => elem !== timerElem)[0];
+    
+    if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
+      if(timerElem.dataset.running === "true"){
+        side = timerElem.parentElement.classList.item(0);
+        console.log(side);
+        stopTimer(timerElem, IntervalStorage[side]);
+      }
+      if(otherTimerElem.dataset.running === "true"){
+        side = otherTimerElem.parentElement.classList.item(0);
+        console.log(side);
+        stopTimer(otherTimerElem, IntervalStorage[side]);
+      }
+      
+    }
     else {
       prevTime = new Date().getTime();
-      const countdown = () => {
-        
-        
+      const countdown = () => {   
         const classOfElementToUpdate = Object.keys(IntervalStorage).find(key => IntervalStorage[key] === countdownIntervalId);
         let toUpdateTimerElem;
         if(classOfElementToUpdate === undefined){
