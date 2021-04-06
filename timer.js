@@ -130,22 +130,23 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 
 // Chess clock section
 
-const addChessTimerEventListeners = (chessTimerElem) => {
+const addChessTimerEventListeners = (chessTimer) => {
 
   const IntervalStorage = {};
   let prevTime = null;
+  // FIXME: what is countdownIntervalId doing here? Isn't interval ID storage handled by IntervalStorage?
   let countdownIntervalId;
 
-  const timerContainer = chessTimerElem.getElementsByClassName("chess-timer-internal-container")[0];
+  const timerContainer = chessTimer.getElementsByClassName("chess-timer-internal-container")[0];
   const leftTimer = timerContainer.getElementsByClassName("timer")[0];
   const rightTimer = timerContainer.getElementsByClassName("timer")[1];
   const leftTimerButton = leftTimer.getElementsByClassName("start-stop-timer")[0];
   const rightTimerButton = rightTimer.getElementsByClassName("start-stop-timer")[0];
-  const buttonPanel = chessTimerElem.getElementsByClassName("button-panel")[0];
+  const buttonPanel = chessTimer.getElementsByClassName("button-panel")[0];
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
   const clearButton = buttonPanel.getElementsByClassName("clear")[0];
-  const deleteButton = chessTimerElem.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
+  const deleteButton = chessTimer.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
 
   // Starting the initial timings
   const startClockInitialButton = (event) => {
@@ -155,8 +156,8 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       .filter((elem) => elem !== timerElem)[0];
 
     if (otherTimerElem.dataset.running === "true" || timerElem.dataset.running === "true") {
-      stopTimer(otherTimerElem, countdownIntervalId);
-      stopTimer(timerElem, countdownIntervalId);
+      stopTimer(otherTimerElem, IntervalStorage[otherTimerElem.parentElement.classList.item(0)]);
+      stopTimer(timerElem, IntervalStorage[otherTimerElem.parentElement.classList.item(0)]);
     } else {
       prevTime = new Date().getTime();
       const countdown = () => {
@@ -205,7 +206,6 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
       startClockFromTimerElem(rightTimer);
-
     } else if (leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true") {
       side = rightTimer.parentElement.classList.item(0);
       stopTimer(rightTimer, IntervalStorage[side]);
@@ -246,7 +246,11 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     updateUiAccordingToTimerState(rightTimer, getCurrentTimerDurationSeconds(rightTimer), 0);
   });
 
-  for (const timerInput of getMinutesAndSecondsInputs(chessTimerElem)) {
+  const chessTimerDurationInputs = [
+    ...getMinutesAndSecondsInputs(leftTimer),
+    ...getMinutesAndSecondsInputs(rightTimer),
+  ];
+  for (const timerInput of chessTimerDurationInputs) {
     timerInput.addEventListener("keypress", (event) => {
       if (event.key < "0" || event.key > "9") {
         event.preventDefault();
@@ -264,13 +268,10 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
   deleteButton.addEventListener("click", () => {
     pause();
-    chessTimerElem.remove();
+    chessTimer.remove();
   });
-
 };
 
-for (const chessTimerElem of document.getElementsByClassName("chess-timer")) {
-  addChessTimerEventListeners(chessTimerElem);
+for (const chessTimer of document.querySelectorAll(".chess-timer")) {
+  addChessTimerEventListeners(chessTimer);
 }
-
-
