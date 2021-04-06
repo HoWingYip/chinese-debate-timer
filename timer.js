@@ -130,23 +130,22 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 
 // Chess clock section
 
-const addChessTimerEventListeners = (chessTimer) => {
+const addChessTimerEventListeners = (chessTimerElem) => {
 
   const IntervalStorage = {};
   let prevTime = null;
-  // FIXME: what is countdownIntervalId doing here? Isn't interval ID storage handled by IntervalStorage?
   let countdownIntervalId;
 
-  const timerContainer = chessTimer.getElementsByClassName("chess-timer-internal-container")[0];
+  const timerContainer = chessTimerElem.getElementsByClassName("chess-timer-internal-container")[0];
   const leftTimer = timerContainer.getElementsByClassName("timer")[0];
   const rightTimer = timerContainer.getElementsByClassName("timer")[1];
   const leftTimerButton = leftTimer.getElementsByClassName("start-stop-timer")[0];
   const rightTimerButton = rightTimer.getElementsByClassName("start-stop-timer")[0];
-  const buttonPanel = chessTimer.getElementsByClassName("button-panel")[0];
+  const buttonPanel = chessTimerElem.getElementsByClassName("button-panel")[0];
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
   const clearButton = buttonPanel.getElementsByClassName("clear")[0];
-  const deleteButton = chessTimer.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
+  const deleteButton = chessTimerElem.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
 
   // Starting the initial timings
   const startClockInitialButton = (event) => {
@@ -155,10 +154,11 @@ const addChessTimerEventListeners = (chessTimer) => {
     const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
       .filter((elem) => elem !== timerElem)[0];
 
-    if (otherTimerElem.dataset.running === "true" || timerElem.dataset.running === "true") {
-      stopTimer(otherTimerElem, IntervalStorage[otherTimerElem.parentElement.classList.item(0)]);
-      stopTimer(timerElem, IntervalStorage[otherTimerElem.parentElement.classList.item(0)]);
-    } else {
+    if (timerElem.dataset.running === "true") {
+      side = timerElem.parentElement.classList.item(0);
+      stopTimer(timerElem, IntervalStorage[side]);
+    } 
+    else {
       prevTime = new Date().getTime();
       const countdown = () => {
         const msElapsed = BigInt(new Date().getTime() - prevTime);
@@ -174,7 +174,6 @@ const addChessTimerEventListeners = (chessTimer) => {
       side = timerElem.parentElement.classList.item(0);
       IntervalStorage[side] = countdownIntervalId;
       timerElem.dataset.running = "true";
-
     }
     updateUiAccordingToTimerState(timerElem, getCurrentTimerDurationSeconds(timerElem), countdownIntervalId);
   };
@@ -206,6 +205,7 @@ const addChessTimerEventListeners = (chessTimer) => {
       stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
       startClockFromTimerElem(rightTimer);
+
     } else if (leftTimer.dataset.running === "false" && rightTimer.dataset.running === "true") {
       side = rightTimer.parentElement.classList.item(0);
       stopTimer(rightTimer, IntervalStorage[side]);
@@ -246,11 +246,7 @@ const addChessTimerEventListeners = (chessTimer) => {
     updateUiAccordingToTimerState(rightTimer, getCurrentTimerDurationSeconds(rightTimer), 0);
   });
 
-  const chessTimerDurationInputs = [
-    ...getMinutesAndSecondsInputs(leftTimer),
-    ...getMinutesAndSecondsInputs(rightTimer),
-  ];
-  for (const timerInput of chessTimerDurationInputs) {
+  for (const timerInput of getMinutesAndSecondsInputs(chessTimerElem)) {
     timerInput.addEventListener("keypress", (event) => {
       if (event.key < "0" || event.key > "9") {
         event.preventDefault();
@@ -268,10 +264,13 @@ const addChessTimerEventListeners = (chessTimer) => {
 
   deleteButton.addEventListener("click", () => {
     pause();
-    chessTimer.remove();
+    chessTimerElem.remove();
   });
+
 };
 
-for (const chessTimer of document.querySelectorAll(".chess-timer")) {
-  addChessTimerEventListeners(chessTimer);
+for (const chessTimerElem of document.getElementsByClassName("chess-timer")) {
+  addChessTimerEventListeners(chessTimerElem);
 }
+
+
