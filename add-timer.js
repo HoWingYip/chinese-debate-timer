@@ -2,12 +2,8 @@ const timerSectionsDiv = document.getElementById("timer-sections");
 const addNormalTimerButton = document.getElementById("add-normal-timer");
 const addChessClockTimerButton = document.getElementById("add-chess-clock-timer");
 
-const nodeIsElement = (node) => node.nodeType === Node.ELEMENT_NODE;
-
 addNormalTimerButton.addEventListener("click", () => {
-  const numExistingTimerSections = [...timerSectionsDiv.childNodes]
-    .filter(nodeIsElement)
-    .length;
+  const numExistingTimerSections = timerSectionsDiv.children.length;
 
   timerSectionsDiv.insertAdjacentHTML(
     "beforeend",
@@ -40,8 +36,8 @@ addNormalTimerButton.addEventListener("click", () => {
     </div>`,
   );
 
-  const addedTimerSection = [...timerSectionsDiv.childNodes].reverse()
-    .find(nodeIsElement);
+  const addedTimerSection = timerSectionsDiv.children[timerSectionsDiv
+    .children.length - 1];
 
   addDeleteButtonListener(addedTimerSection);
   for (const timerElem of addedTimerSection.getElementsByClassName("timer")) {
@@ -50,9 +46,7 @@ addNormalTimerButton.addEventListener("click", () => {
 });
 
 addChessClockTimerButton.addEventListener("click", () => {
-  const numExistingTimerSections = [...timerSectionsDiv.childNodes]
-    .filter(nodeIsElement)
-    .length;
+  const numExistingTimerSections = timerSectionsDiv.children.length;
 
   timerSectionsDiv.insertAdjacentHTML(
     "beforeend",
@@ -93,8 +87,8 @@ addChessClockTimerButton.addEventListener("click", () => {
   </div>`,
   );
 
-  const addedChessTimerSection = [...timerSectionsDiv.childNodes].reverse()
-    .find(nodeIsElement);
+  const addedChessTimerSection = timerSectionsDiv.children[timerSectionsDiv
+    .children.length - 1];
 
   addChessTimerEventListeners(addedChessTimerSection);
 });
