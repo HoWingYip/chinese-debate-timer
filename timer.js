@@ -128,10 +128,10 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 }
 
 // Chess clock section
-let IntervalStorage = {};
+const IntervalStorage = {};
 const addChessTimerEventListeners = (chessTimerElem) => {
 
-  
+
   let prevTime = null;
   let countdownIntervalId;
 
@@ -152,28 +152,25 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     timerElem = event.target.closest(".timer");
     const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
       .filter((elem) => elem !== timerElem)[0];
-    
+
     if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
-      if(timerElem.dataset.running === "true"){
+      if (timerElem.dataset.running === "true") {
         side = timerElem.parentElement.classList.item(0);
         stopTimer(timerElem, IntervalStorage[side]);
       }
-      if(otherTimerElem.dataset.running === "true"){
+      if (otherTimerElem.dataset.running === "true") {
         side = otherTimerElem.parentElement.classList.item(0);
         stopTimer(otherTimerElem, IntervalStorage[side]);
       }
-      
-    }
-    else {
+    } else {
       prevTime = new Date().getTime();
-      const countdown = () => {   
-        const classOfElementToUpdate = Object.keys(IntervalStorage).find(key => IntervalStorage[key] === countdownIntervalId);
+      const countdown = () => {
+        const classOfElementToUpdate = Object.keys(IntervalStorage).find((key) => IntervalStorage[key] === countdownIntervalId);
         let toUpdateTimerElem;
-        if(classOfElementToUpdate === undefined){
+        if (classOfElementToUpdate === undefined) {
           toUpdateTimerElem = timerElem;
-        }
-        else{
-          toUpdateTimerElem = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName('timer')[0]
+        } else {
+          toUpdateTimerElem = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName("timer")[0];
         }
 
         const msElapsed = BigInt(new Date().getTime() - prevTime);
