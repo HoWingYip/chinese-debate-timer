@@ -128,10 +128,10 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 }
 
 // Chess clock section
-const IntervalStorage = {};
+let IntervalStorage = {};
 const addChessTimerEventListeners = (chessTimerElem) => {
 
-
+  
   let prevTime = null;
   let countdownIntervalId;
 
@@ -148,27 +148,37 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
   // Starting the initial timings
   const startClockInitialButton = (event) => {
-    timerElem = event.target.closest(".timer");
 
-    if (timerElem.dataset.running === "true") {
-      side = timerElem.parentElement.classList.item(0);
-      stopTimer(timerElem, IntervalStorage[side]);
-    } else {
+    timerElem = event.target.closest(".timer");
+    const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
+      .filter((elem) => elem !== timerElem)[0];
+    
+    if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
+      if(timerElem.dataset.running === "true"){
+        side = timerElem.parentElement.classList.item(0);
+        stopTimer(timerElem, IntervalStorage[side]);
+      }
+      if(otherTimerElem.dataset.running === "true"){
+        side = otherTimerElem.parentElement.classList.item(0);
+        stopTimer(otherTimerElem, IntervalStorage[side]);
+      }
+      
+    }
+    else {
       prevTime = new Date().getTime();
-      const countdown = () => {
-        const classOfElementToUpdate = Object.keys(IntervalStorage)
-          .find((key) => IntervalStorage[key] === countdownIntervalId);
-        let timerElemToUpdate;
-        if (typeof classOfElementToUpdate === "undefined") {
-          timerElemToUpdate = timerElem;
-        } else {
-          timerElemToUpdate = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName("timer")[0];
+      const countdown = () => {   
+        const classOfElementToUpdate = Object.keys(IntervalStorage).find(key => IntervalStorage[key] === countdownIntervalId);
+        let toUpdateTimerElem;
+        if(classOfElementToUpdate === undefined){
+          toUpdateTimerElem = timerElem;
+        }
+        else{
+          toUpdateTimerElem = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName('timer')[0]
         }
 
         const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElemToUpdate) - msElapsed / 1000n;
-        updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
-        // console.log(String(countdownIntervalId) + " : " + String(timerElem.parentElement.classList.item(0)))
+        const newTimeSeconds = getCurrentTimerDurationSeconds(toUpdateTimerElem) - msElapsed / 1000n;
+        updateUiAccordingToTimerState(toUpdateTimerElem, newTimeSeconds, countdownIntervalId);
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
         }
