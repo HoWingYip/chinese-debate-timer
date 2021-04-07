@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   height: 100%; */
   margin: 0 20px 60px;
-  background-image: url("/img/background.jpg");
+  background-image: url("img/background.jpg");
   background-size: 100% auto;
   font-family: "Open Sans", sans-serif;
 }
@@ -240,7 +240,7 @@ input[type="text"] {
 }
 
 .delete-button-container .delete {
-  background-image: url("./img/delete.svg");
+  background-image: url("img/delete.svg");
   background-repeat: no-repeat;
   background-size: contain;
   width: 40px;
