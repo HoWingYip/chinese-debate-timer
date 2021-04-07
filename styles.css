@@ -1,5 +1,7 @@
 body {
   margin: 0 20px 60px;
+  background-image: url("img/background.jpg");
+  background-size: contain;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -21,14 +23,15 @@ input[type="text"] {
   transition: border-bottom-color 0.2s;
 }
 
-.normal-timer {
+#timer-sections > div {
   position: relative;
   display: flex;
-  justify-content: space-between;
   width: 70%;
+  justify-content: space-between;
   margin: 0 auto 20px;
   padding: 20px;
   border-radius: 15px;
+  background-color: #fff;
   box-shadow: 0 0 20px -3px #bbb;
 }
 
@@ -57,6 +60,52 @@ input[type="text"] {
 
 .normal-timer .timer-name:focus {
   border-bottom-color: #3399ff;
+}
+
+.chess-timer {
+  flex-direction: column;
+}
+
+.chess-timer .chess-timer-internal-container {
+  position: relative;
+  width: 100%;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: row;
+}
+
+.chess-timer .timer-name {
+  width: 80%;
+  margin: auto;
+  font-size: 35px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid transparent;
+}
+
+.chess-timer .timer-name:focus {
+  border-bottom-color: #3399ff;
+}
+
+.chess-timer-internal-container .timer-left,
+.chess-timer-internal-container .timer-right {
+  padding-bottom: 0;
+}
+
+.chess-timer-internal-container .timer-separator {
+  height: 100%;
+  transform: translateY(-50%);
+  background-color: #000;
+}
+
+.chess-timer .button-panel {
+  display: flex;
+  margin: 26px 0 5px 50%;
+  transform: translateX(-50%);
+  justify-content: center;
+}
+
+.chess-timer .button-panel button:not(:last-child) {
+  margin-right: 10px;
 }
 
 .timer {
@@ -159,61 +208,6 @@ input[type="text"] {
   margin-left: -4px;
   vertical-align: middle;
   font-size: inherit;
-}
-
-
-.chess-timer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 70%;
-  margin: 0 auto 20px;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px -3px #bbb;
-}
-
-.chess-timer .chess-timer-internal-container {
-  position: relative;
-  width: 100%;
-  justify-content: space-evenly;
-  display: flex;
-  flex-direction: row;
-}
-
-.chess-timer .timer-name {
-  width: 80%;
-  margin: auto;
-  font-size: 35px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid transparent;
-}
-
-.chess-timer .timer-name:focus {
-  border-bottom-color: #3399ff;
-}
-
-.chess-timer-internal-container .timer-left,
-.chess-timer-internal-container .timer-right {
-  padding-bottom: 0;
-}
-
-.chess-timer-internal-container .timer-separator {
-  height: 100%;
-  transform: translateY(-50%);
-  background-color: #000;
-}
-
-.chess-timer .button-panel {
-  display: flex;
-  margin: 26px 0 5px 50%;
-  transform: translateX(-50%);
-  justify-content: center;
-}
-
-.chess-timer .button-panel button:not(:last-child) {
-  margin-right: 10px;
 }
 
 .delete-button-container {
