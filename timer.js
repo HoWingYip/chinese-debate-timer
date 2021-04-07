@@ -1,3 +1,7 @@
+const playBellSound = () => {
+  new Audio("ding.m4a").play();
+};
+
 const getMinutesAndSecondsInputs = (timerElem) => timerElem
   .querySelectorAll("input[type='text']");
 
@@ -60,6 +64,7 @@ const addTimerEventListeners = (timerElem) => {
     if (timerElem.dataset.running === "true") {
       stopTimer(timerElem, countdownIntervalId);
     } else {
+      let shouldPlayBellAt30s = true;
       prevTime = new Date().getTime();
 
       const countdown = () => {
@@ -69,6 +74,16 @@ const addTimerEventListeners = (timerElem) => {
 
         updateUiAccordingToTimerState(timerElem, newTimeSeconds,
           countdownIntervalId);
+
+        if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
+          newTimeSeconds === 0n) {
+          playBellSound();
+          shouldPlayBellAt30s = false;
+        }
+
+        if (newTimeSeconds !== 30n) {
+          shouldPlayBellAt30s = true;
+        }
 
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
@@ -171,11 +186,24 @@ const addChessTimerEventListeners = (chessTimerElem) => {
         timerElemToUpdate = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName("timer")[0];
       }
 
+      let shouldPlayBellAt30s = true;
       prevTime = new Date().getTime();
       const countdown = () => {
         const msElapsed = BigInt(new Date().getTime() - prevTime);
         const newTimeSeconds = getCurrentTimerDurationSeconds(timerElemToUpdate) - msElapsed / 1000n;
+
         updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
+
+        if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
+          newTimeSeconds === 0n) {
+          playBellSound();
+          shouldPlayBellAt30s = false;
+        }
+
+        if (newTimeSeconds !== 30n) {
+          shouldPlayBellAt30s = true;
+        }
+
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
         }
@@ -191,11 +219,24 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   };
 
   const startClockFromTimerElem = (timerElem) => {
+    let shouldPlayBellAt30s = true;
     prevTime = new Date().getTime();
     const countdown = () => {
       const msElapsed = BigInt(new Date().getTime() - prevTime);
       const newTimeSeconds = getCurrentTimerDurationSeconds(timerElem) - msElapsed / 1000n;
+
       updateUiAccordingToTimerState(timerElem, newTimeSeconds, countdownIntervalId);
+
+      if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
+        newTimeSeconds === 0n) {
+        playBellSound();
+        shouldPlayBellAt30s = false;
+      }
+
+      if (newTimeSeconds !== 30n) {
+        shouldPlayBellAt30s = true;
+      }
+
       if (msElapsed >= 1000n) {
         prevTime = new Date().getTime();
       }
