@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   height: 100%; */
   margin: 0 20px 60px;
-  background-image: url("img/background.jpg");
+  background-image: url("img/background-75-opacity.jpg");
   background-size: 100% auto;
   font-family: "Open Sans", sans-serif;
 }
