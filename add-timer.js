@@ -63,7 +63,8 @@ const addNormalTimer = (timer = { leftTimer: {}, rightTimer: {} }) => {
   }
 };
 
-const addChessClockTimer = ({ leftTimer = {}, rightTimer = {} }) => {
+const addChessClockTimer = (timer = { leftTimer: {}, rightTimer: {} }) => {
+  const { leftTimer, rightTimer } = timer;
   const numExistingTimerSections = timerSectionsDiv.children.length;
 
   // TODO: extract to helper function

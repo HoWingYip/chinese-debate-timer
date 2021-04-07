@@ -41,12 +41,15 @@ const saveTimers = () => {
 };
 
 const restoreTimers = () => {
+  const timers = JSON.parse(localStorage.getItem("timerConfiguration"));
+  if (timers.length === 0) {
+    return;
+  }
+
   for (const existingTimerSection of [...document.getElementById("timer-sections")
     .children]) {
     existingTimerSection.remove();
   }
-
-  const timers = JSON.parse(localStorage.getItem("timerConfiguration"));
 
   // TODO: set length of input to accommodate string
   for (const timer of timers) {
