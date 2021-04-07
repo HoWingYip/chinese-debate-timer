@@ -1,9 +1,24 @@
 body {
+  /* display: flex;
+  flex-direction: column;
+  height: 100%; */
   margin: 0 20px 60px;
-  background-image: url("img/background.jpg");
+  background-image: url("/img/background.jpg");
   background-size: contain;
   font-family: "Open Sans", sans-serif;
 }
+
+/* #background-opacity-overlay {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  flex: 1;
+  background-color: #fff;
+  opacity: 0.5;
+  z-index: -1;
+} */
 
 h1 {
   margin-bottom: 35px;
@@ -21,6 +36,14 @@ input[type="text"] {
   border: none;
   outline: none;
   transition: border-bottom-color 0.2s;
+}
+
+#title-text {
+  position: relative;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 25px 0 22px;
 }
 
 #timer-sections > div {
