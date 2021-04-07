@@ -2,18 +2,36 @@ const timerSectionsDiv = document.getElementById("timer-sections");
 const addNormalTimerButton = document.getElementById("add-normal-timer");
 const addChessClockTimerButton = document.getElementById("add-chess-clock-timer");
 
-addNormalTimerButton.addEventListener("click", () => {
+const addNormalTimer = (timer = { leftTimer: {}, rightTimer: {} }) => {
+  const { leftTimer, rightTimer } = timer;
   const numExistingTimerSections = timerSectionsDiv.children.length;
+
+  // TODO: extract to helper function
+  const leftTimerName = leftTimer.name ||
+    `Section ${numExistingTimerSections + 1} Timer 1`;
+  const leftTimerDuration = leftTimer.durationStr ? BigInt(leftTimer.durationStr) : 0n;
+  const leftTimerMinutes = leftTimerDuration / 60n;
+  const leftTimerSeconds = leftTimerDuration % 60n;
+  const leftTimerMinutesStr = String(leftTimerMinutes);
+  const leftTimerSecondsStr = String(leftTimerSeconds).padStart(2, "0");
+
+  const rightTimerName = rightTimer.name ||
+    `Section ${numExistingTimerSections + 1} Timer 2`;
+  const rightTimerDuration = rightTimer.durationStr ? BigInt(rightTimer.durationStr) : 0n;
+  const rightTimerMinutes = rightTimerDuration / 60n;
+  const rightTimerSeconds = rightTimerDuration % 60n;
+  const rightTimerMinutesStr = String(rightTimerMinutes);
+  const rightTimerSecondsStr = String(rightTimerSeconds).padStart(2, "0");
 
   timerSectionsDiv.insertAdjacentHTML(
     "beforeend",
     `<div class="normal-timer">
       <div class="timer-left">
-        <input type="text" class="timer-name" value="Section ${numExistingTimerSections + 1} Timer 1">
+        <input type="text" class="timer-name" value="${leftTimerName}">
         <div class="timer" data-running="false">
           <div class="timer-input-wrapper">
-            <input type="text" class="time-remaining-minutes" value="0">m
-            <input type="text" class="time-remaining-seconds" value="00">s
+            <input type="text" class="time-remaining-minutes" value="${leftTimerMinutesStr}">m
+            <input type="text" class="time-remaining-seconds" value="${leftTimerSecondsStr}">s
           </div>
           <button class="start-stop-timer"></button>
         </div>
@@ -21,11 +39,11 @@ addNormalTimerButton.addEventListener("click", () => {
 
       <div class="timer-separator"></div>
       <div class="timer-right">
-        <input type="text" class="timer-name" value="Section ${numExistingTimerSections + 1} Timer 2">
+        <input type="text" class="timer-name" value="${rightTimerName}">
         <div class="timer" data-running="false">
           <div class="timer-input-wrapper">
-            <input type="text" class="time-remaining-minutes" value="0">m
-            <input type="text" class="time-remaining-seconds" value="00">s
+            <input type="text" class="time-remaining-minutes" value="${rightTimerMinutesStr}">m
+            <input type="text" class="time-remaining-seconds" value="${rightTimerSecondsStr}">s
           </div>
           <button class="start-stop-timer"></button>
         </div>
@@ -43,10 +61,23 @@ addNormalTimerButton.addEventListener("click", () => {
   for (const timerElem of addedTimerSection.getElementsByClassName("timer")) {
     addTimerEventListeners(timerElem);
   }
-});
+};
 
-addChessClockTimerButton.addEventListener("click", () => {
+const addChessClockTimer = ({ leftTimer = {}, rightTimer = {} }) => {
   const numExistingTimerSections = timerSectionsDiv.children.length;
+
+  // TODO: extract to helper function
+  const leftTimerDuration = leftTimer.durationStr ? BigInt(leftTimer.durationStr) : 0n;
+  const leftTimerMinutes = leftTimerDuration / 60n;
+  const leftTimerSeconds = leftTimerDuration % 60n;
+  const leftTimerMinutesStr = String(leftTimerMinutes);
+  const leftTimerSecondsStr = String(leftTimerSeconds).padStart(2, "0");
+
+  const rightTimerDuration = rightTimer.durationStr ? BigInt(rightTimer.durationStr) : 0n;
+  const rightTimerMinutes = rightTimerDuration / 60n;
+  const rightTimerSeconds = rightTimerDuration % 60n;
+  const rightTimerMinutesStr = String(rightTimerMinutes);
+  const rightTimerSecondsStr = String(rightTimerSeconds).padStart(2, "0");
 
   timerSectionsDiv.insertAdjacentHTML(
     "beforeend",
@@ -57,8 +88,8 @@ addChessClockTimerButton.addEventListener("click", () => {
       <div class="chess-timer-left-${numExistingTimerSections + 1} timer-left">
         <div class="timer" data-running="false">
           <div class="timer-input-wrapper">
-            <input type="text" class="time-remaining-minutes" value="0">m
-            <input type="text" class="time-remaining-seconds" value="00">s
+            <input type="text" class="time-remaining-minutes" value="${leftTimerMinutesStr}">m
+            <input type="text" class="time-remaining-seconds" value="${leftTimerSecondsStr}">s
           </div>
           <button class="start-stop-timer"></button>
         </div>
@@ -68,8 +99,8 @@ addChessClockTimerButton.addEventListener("click", () => {
       <div class="chess-timer-right-${numExistingTimerSections + 1} timer-right">
         <div class="timer" data-running="false">
           <div class="timer-input-wrapper">
-            <input type="text" class="time-remaining-minutes" value="0">m
-            <input type="text" class="time-remaining-seconds" value="00">s
+            <input type="text" class="time-remaining-minutes" value="${rightTimerMinutesStr}">m
+            <input type="text" class="time-remaining-seconds" value="${rightTimerSecondsStr}">s
           </div>
           <button class="start-stop-timer"></button>
         </div>
@@ -91,4 +122,14 @@ addChessClockTimerButton.addEventListener("click", () => {
     .children.length - 1];
 
   addChessTimerEventListeners(addedChessTimerSection);
+};
+
+addNormalTimerButton.addEventListener("click", () => {
+  addNormalTimer();
+  saveTimers();
+});
+
+addChessClockTimerButton.addEventListener("click", () => {
+  addChessClockTimer();
+  saveTimers();
 });

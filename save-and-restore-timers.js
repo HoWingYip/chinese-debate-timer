@@ -8,11 +8,11 @@ const saveTimers = () => {
       type: "",
       leftTimer: {
         name: "",
-        duration: "0", // string because JSON.stringify can't serialize BigInt
+        durationStr: "0", // string because JSON.stringify can't serialize BigInt
       },
       rightTimer: {
         name: "",
-        duration: "0", // string because JSON.stringify can't serialize BigInt
+        durationStr: "0", // string because JSON.stringify can't serialize BigInt
       },
     };
 
@@ -32,7 +32,7 @@ const saveTimers = () => {
     // remember to convert back to BigInt during deserialization
     const timerDurations = timerElems.map((timerElem) =>
       String(getCurrentTimerDurationSeconds(timerElem)));
-    [timer.leftTimer.duration, timer.rightTimer.duration] = timerDurations;
+    [timer.leftTimer.durationStr, timer.rightTimer.durationStr] = timerDurations;
 
     timers.push(timer);
   }
@@ -41,5 +41,19 @@ const saveTimers = () => {
 };
 
 const restoreTimers = () => {
+  for (const existingTimerSection of [...document.getElementById("timer-sections")
+    .children]) {
+    existingTimerSection.remove();
+  }
 
+  const timers = JSON.parse(localStorage.getItem("timerConfiguration"));
+
+  // TODO: set length of input to accommodate string
+  for (const timer of timers) {
+    if (timer.type === "normal") {
+      addNormalTimer(timer);
+    } else if (timer.type === "chess") {
+      addChessClockTimer(timer);
+    }
+  }
 };

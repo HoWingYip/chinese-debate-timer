@@ -45,6 +45,8 @@ const updateUiAccordingToTimerState = (
 
   durationInputMinutes.readOnly = durationInputSeconds.readOnly =
     (timerElem.dataset.running === "true");
+
+  saveTimers();
 };
 
 const addTimerEventListeners = (timerElem) => {
@@ -130,8 +132,6 @@ for (const normalTimer of document.getElementsByClassName("normal-timer")) {
 // Chess clock section
 const IntervalStorage = {};
 const addChessTimerEventListeners = (chessTimerElem) => {
-
-
   let prevTime = null;
   let countdownIntervalId;
 
@@ -163,19 +163,19 @@ const addChessTimerEventListeners = (chessTimerElem) => {
         stopTimer(otherTimerElem, IntervalStorage[side]);
       }
     } else {
+      const classOfElementToUpdate = Object.keys(IntervalStorage).find((key) => IntervalStorage[key] === countdownIntervalId);
+      let timerElemToUpdate;
+      if (typeof classOfElementToUpdate === "undefined") {
+        timerElemToUpdate = timerElem;
+      } else {
+        timerElemToUpdate = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName("timer")[0];
+      }
+
       prevTime = new Date().getTime();
       const countdown = () => {
-        const classOfElementToUpdate = Object.keys(IntervalStorage).find((key) => IntervalStorage[key] === countdownIntervalId);
-        let toUpdateTimerElem;
-        if (classOfElementToUpdate === undefined) {
-          toUpdateTimerElem = timerElem;
-        } else {
-          toUpdateTimerElem = document.getElementsByClassName(classOfElementToUpdate)[0].getElementsByClassName("timer")[0];
-        }
-
         const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds(toUpdateTimerElem) - msElapsed / 1000n;
-        updateUiAccordingToTimerState(toUpdateTimerElem, newTimeSeconds, countdownIntervalId);
+        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElemToUpdate) - msElapsed / 1000n;
+        updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
         if (msElapsed >= 1000n) {
           prevTime = new Date().getTime();
         }
@@ -258,7 +258,10 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     updateUiAccordingToTimerState(rightTimer, getCurrentTimerDurationSeconds(rightTimer), 0);
   });
 
-  for (const timerInput of getMinutesAndSecondsInputs(chessTimerElem)) {
+  for (const timerInput of [
+    ...getMinutesAndSecondsInputs(leftTimer),
+    ...getMinutesAndSecondsInputs(rightTimer),
+  ]) {
     timerInput.addEventListener("keypress", (event) => {
       if (event.key < "0" || event.key > "9") {
         event.preventDefault();
@@ -278,11 +281,8 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     pause();
     chessTimerElem.remove();
   });
-
 };
 
 for (const chessTimerElem of document.getElementsByClassName("chess-timer")) {
   addChessTimerEventListeners(chessTimerElem);
 }
-
-
