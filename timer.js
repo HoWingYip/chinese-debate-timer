@@ -1,5 +1,5 @@
 const playBellSound = () => {
-  new Audio("ding.m4a").play();
+  new Audio("ding.mp3").play();
 };
 
 const getMinutesAndSecondsInputs = (timerElem) => timerElem

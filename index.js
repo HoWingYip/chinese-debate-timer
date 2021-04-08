@@ -8,3 +8,7 @@ window.addEventListener("load", () => {
     });
   }
 });
+
+document.getElementById("ring-bell").addEventListener("click", () => {
+  playBellSound();
+});

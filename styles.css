@@ -1,24 +1,9 @@
 body {
-  /* display: flex;
-  flex-direction: column;
-  height: 100%; */
   margin: 0 20px 60px;
   background-image: url("img/background-75-opacity.jpg");
   background-size: 100% auto;
   font-family: "Open Sans", sans-serif;
 }
-
-/* #background-opacity-overlay {
-  position: absolute;
-  content: "";
-  top: 0;
-  left: 0;
-  width: 100%;
-  flex: 1;
-  background-color: #fff;
-  opacity: 0.5;
-  z-index: -1;
-} */
 
 h1 {
   margin-bottom: 35px;
@@ -44,6 +29,11 @@ input[type="text"] {
   left: 50%;
   transform: translateX(-50%);
   margin: 25px 0 22px;
+}
+
+#ring-bell {
+  display: block;
+  margin: 0 auto 20px;
 }
 
 #timer-sections > div {
