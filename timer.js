@@ -2,6 +2,10 @@ const playBellSound = () => {
   new Audio("ding.mp3").play();
 };
 
+const playBellSoundTwice = () => {
+  new Audio("ding-twice.mp3").play();
+};
+
 const getMinutesAndSecondsInputs = (timerElem) => timerElem
   .querySelectorAll("input[type='text']");
 
@@ -75,14 +79,17 @@ const addTimerEventListeners = (timerElem) => {
         updateUiAccordingToTimerState(timerElem, newTimeSeconds,
           countdownIntervalId);
 
-        if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
-          newTimeSeconds === 0n) {
+        if (newTimeSeconds === 30n && shouldPlayBellAt30s) {
           playBellSound();
+          // prevents bell from continuously ringing when time is 30s
           shouldPlayBellAt30s = false;
         }
-
         if (newTimeSeconds !== 30n) {
           shouldPlayBellAt30s = true;
+        }
+
+        if (newTimeSeconds === 0n) {
+          playBellSoundTwice();
         }
 
         if (msElapsed >= 1000n) {
@@ -194,14 +201,17 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
         updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
 
-        if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
-          newTimeSeconds === 0n) {
+        if (newTimeSeconds === 30n && shouldPlayBellAt30s) {
           playBellSound();
+          // prevents bell from continuously ringing when time is 30s
           shouldPlayBellAt30s = false;
         }
-
         if (newTimeSeconds !== 30n) {
           shouldPlayBellAt30s = true;
+        }
+
+        if (newTimeSeconds === 0n) {
+          playBellSoundTwice();
         }
 
         if (msElapsed >= 1000n) {
@@ -227,14 +237,17 @@ const addChessTimerEventListeners = (chessTimerElem) => {
 
       updateUiAccordingToTimerState(timerElem, newTimeSeconds, countdownIntervalId);
 
-      if ((newTimeSeconds === 30n && shouldPlayBellAt30s) ||
-        newTimeSeconds === 0n) {
+      if (newTimeSeconds === 30n && shouldPlayBellAt30s) {
         playBellSound();
+        // prevents bell from continuously ringing when time is 30s
         shouldPlayBellAt30s = false;
       }
-
       if (newTimeSeconds !== 30n) {
         shouldPlayBellAt30s = true;
+      }
+
+      if (newTimeSeconds === 0n) {
+        playBellSoundTwice();
       }
 
       if (msElapsed >= 1000n) {
