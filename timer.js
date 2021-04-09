@@ -167,25 +167,17 @@ const addChessTimerEventListeners = (chessTimerElem) => {
   const swapButton = buttonPanel.getElementsByClassName("swap")[0];
   const pauseButton = buttonPanel.getElementsByClassName("chess-clock-pause")[0];
   const clearButton = buttonPanel.getElementsByClassName("clear")[0];
-  const deleteButton = chessTimerElem.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
 
   // Starting the initial timings
   const startClockInitialButton = (event) => {
 
     timerElem = event.target.closest(".timer");
+    
+
     const otherTimerElem = [...timerContainer.getElementsByClassName("timer")]
       .filter((elem) => elem !== timerElem)[0];
 
-    if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
-      if (timerElem.dataset.running === "true") {
-        side = timerElem.parentElement.classList.item(0);
-        stopTimer(timerElem, IntervalStorage[side]);
-      }
-      if (otherTimerElem.dataset.running === "true") {
-        side = otherTimerElem.parentElement.classList.item(0);
-        stopTimer(otherTimerElem, IntervalStorage[side]);
-      }
-    } else {
+    if((timerElem.dataset.running === "false" && otherTimerElem.dataset.running === "false")){
       const classOfElementToUpdate = Object.keys(IntervalStorage).find((key) => IntervalStorage[key] === countdownIntervalId);
       let timerElemToUpdate;
       if (typeof classOfElementToUpdate === "undefined") {
@@ -198,11 +190,14 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       prevTime = new Date().getTime();
       const countdown = () => {
         const msElapsed = BigInt(new Date().getTime() - prevTime);
-        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElemToUpdate) - msElapsed / 1000n;
+        const newTimeSeconds = getCurrentTimerDurationSeconds(timerElem) - msElapsed / 1000n;
+        side = timerElem.parentElement.classList.item(0);
 
-        updateUiAccordingToTimerState(timerElemToUpdate, newTimeSeconds, countdownIntervalId);
+        updateUiAccordingToTimerState(timerElem, newTimeSeconds, IntervalStorage[side]);
+        
 
         if (newTimeSeconds === 30n && shouldPlayBellAt30s) {
+
           playBellSound();
           // prevents bell from continuously ringing when time is 30s
           shouldPlayBellAt30s = false;
@@ -226,11 +221,23 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       IntervalStorage[side] = countdownIntervalId;
       timerElem.dataset.running = "true";
     }
+
+    else if (timerElem.dataset.running === "true" || otherTimerElem.dataset.running === "true") {
+      if (timerElem.dataset.running === "true") {
+        side = timerElem.parentElement.classList.item(0);
+        stopTimer(timerElem, IntervalStorage[side]);
+      }
+      if (otherTimerElem.dataset.running === "true") {
+        side = otherTimerElem.parentElement.classList.item(0);
+        stopTimer(otherTimerElem, IntervalStorage[side]);
+      }
+    }
     updateUiAccordingToTimerState(timerElem, getCurrentTimerDurationSeconds(timerElem), countdownIntervalId);
   };
 
   const startClockFromTimerElem = (timerElem) => {
     let shouldPlayBellAt30s = true;
+    console.log("Hi")
     prevTime = new Date().getTime();
     const countdown = () => {
       const msElapsed = BigInt(new Date().getTime() - prevTime);
@@ -287,7 +294,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
       stopTimer(leftTimer, IntervalStorage[side]);
       leftTimer.dataset.running = "false";
     }
-    if (rightTimer.dataset.running === "true") {
+    if (rightTimer.dataset.running === "true" && leftTimer.dataset.running === "false") {
       side = rightTimer.parentElement.classList.item(0);
       stopTimer(rightTimer, IntervalStorage[side]);
       rightTimer.dataset.running = "false";
