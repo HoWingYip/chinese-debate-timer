@@ -67,6 +67,9 @@ const addChessClockTimer = (timer = { leftTimer: {}, rightTimer: {} }) => {
   const { leftTimer, rightTimer } = timer;
   const numExistingTimerSections = timerSectionsDiv.children.length;
 
+  const chessTimerName = timer.name ||
+    `Chess Clock ${numExistingTimerSections + 1}`;
+
   // TODO: extract to helper function
   const leftTimerDuration = leftTimer.durationStr ? BigInt(leftTimer.durationStr) : 0n;
   const leftTimerMinutes = leftTimerDuration / 60n;
@@ -83,7 +86,7 @@ const addChessClockTimer = (timer = { leftTimer: {}, rightTimer: {} }) => {
   timerSectionsDiv.insertAdjacentHTML(
     "beforeend",
     `<div class="chess-timer">
-    <input type="text" class="timer-name" value="Chess Clock ${numExistingTimerSections + 1}">
+    <input type="text" class="timer-name" value="${timerName}">
 
     <div class= "chess-timer-internal-container">
       <div class="chess-timer-left-${numExistingTimerSections + 1} timer-left">
