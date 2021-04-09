@@ -135,10 +135,11 @@ const addTimerEventListeners = (timerElem) => {
   }
 };
 
-const addDeleteButtonListener = (normalTimer) => {
-  const deleteButton = normalTimer.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
+const addDeleteButtonListener = (timerSection) => {
+  const deleteButton = timerSection.getElementsByClassName("delete-button-container")[0].getElementsByClassName("delete")[0];
   deleteButton.addEventListener("click", () => {
-    normalTimer.remove();
+    timerSection.remove();
+    saveTimers();
   });
 };
 
@@ -331,10 +332,7 @@ const addChessTimerEventListeners = (chessTimerElem) => {
     });
   }
 
-  deleteButton.addEventListener("click", () => {
-    pause();
-    chessTimerElem.remove();
-  });
+  addDeleteButtonListener(chessTimerElem);
 };
 
 for (const chessTimerElem of document.getElementsByClassName("chess-timer")) {
