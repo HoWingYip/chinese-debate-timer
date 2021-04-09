@@ -5,15 +5,8 @@ const saveTimers = () => {
 
   for (const timerSection of timerSections) {
     const timer = {
-      type: "",
-      leftTimer: {
-        name: "",
-        durationStr: "0", // string because JSON.stringify can't serialize BigInt
-      },
-      rightTimer: {
-        name: "",
-        durationStr: "0", // string because JSON.stringify can't serialize BigInt
-      },
+      leftTimer: {},
+      rightTimer: {},
     };
 
     const timerElems = [...timerSection.querySelectorAll(".timer")];
@@ -26,6 +19,7 @@ const saveTimers = () => {
       [timer.leftTimer.name, timer.rightTimer.name] = timerNames;
     } else if (timerSection.classList.contains("chess-timer")) {
       timer.type = "chess";
+      timer.name = timerSection.getElementsByClassName("timer-name")[0].value;
     }
 
     // convert duration to string because JSON.stringify can't serialize BigInt
