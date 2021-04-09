@@ -35,8 +35,13 @@ const saveTimers = () => {
 };
 
 const restoreTimers = () => {
-  const timers = JSON.parse(localStorage.getItem("timerConfiguration"));
-  if (timers.length === 0) {
+  let timers;
+  try {
+    timers = JSON.parse(localStorage.getItem("timerConfiguration"));
+  } catch (err) {
+    return;
+  }
+  if (timers === null || !Array.isArray(timers) || timers.length === 0) {
     return;
   }
 
