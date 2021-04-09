@@ -237,14 +237,8 @@ input[type="text"] {
   height: 40px;
   border: none;
   border-radius: 10%;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s;
 }
-
-.delete-button-container .delete:active {
-  border: none;
-  outline: none;
-}
-
 .delete-button-container .delete:hover {
   transform: scale(1.1);
 }
